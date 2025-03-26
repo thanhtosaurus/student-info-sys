@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import CatalogLanding from './CatalogLanding';
 
 const AdminDashboard = () => {
+  // Local state to control when to show the Catalog Landing page
   const [showCatalogLanding, setShowCatalogLanding] = useState(false);
 
   return (
