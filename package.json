@@ -1,5 +1,17 @@
 {
+  "name": "student-info-sys",
+  "version": "1.0.0",
+  "description": "Student Information System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "server": "nodemon server/index.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm install && npm install --prefix client && npm install --prefix server && npm run build --prefix client"
+  },
   "dependencies": {
+    "concurrently": "^8.0.0",
     "react-router-dom": "^6.30.0"
   }
 }
