@@ -32,14 +32,11 @@ npm install
 ```
 
 3. Environment Setup
+Create a `.env` file in the server directory with the following variables:
 ```bash
-# In the server directory
-cp .env.example .env
-# Edit .env with your database credentials
-
-# In the client directory
-cp .env.example .env
-# Edit .env with your API URL
+# Supabase Configuration
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your_service_role_key_here    # Service role key for server-side operations
 ```
 
 ## 🛠️ Development
