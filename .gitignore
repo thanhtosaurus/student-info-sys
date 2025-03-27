@@ -1,1 +1,12 @@
-/server/node_modules
+# Node dependencies
+node_modules
+/node_modules
+**/node_modules
+client/node_modules
+server/node_modules
+
+# Other common ignores
+.env
+.DS_Store
+build/
+dist/
