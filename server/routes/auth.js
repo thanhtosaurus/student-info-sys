@@ -2,6 +2,82 @@ const express = require('express');
 const router = express.Router();
 const supabase = require('../db');
 
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 description: User's password
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   description: JWT token
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *       401:
+ *         description: Invalid credentials
+ *       400:
+ *         description: Missing required fields
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated user ID
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: User's email
+ *         name:
+ *           type: string
+ *           description: User's full name
+ *         role:
+ *           type: string
+ *           description: User's role
+ *           enum: [user, admin]
+ */
+
 // Login route
 router.post('/login', async (req, res) => {
   try {
