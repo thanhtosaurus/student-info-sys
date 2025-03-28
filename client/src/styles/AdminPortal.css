@@ -1,0 +1,97 @@
+.admin-container {
+  min-height: 100vh;
+  background-color: #0F2A4A; /* CSUF dark navy blue */
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.admin-header h1 {
+  color: #FFFFFF;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.admin-header p {
+  color: #E6E6E6;
+  font-size: 1.1rem;
+}
+
+.admin-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-card {
+  background-color: #1B3B66; /* Slightly lighter navy blue */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.admin-card h3 {
+  color: #FFFFFF;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.admin-card p {
+  color: #E6E6E6;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.card-button {
+  background-color: #F49E4C; /* CSUF orange */
+  color: #0F2A4A;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.card-button:hover {
+  background-color: #F7B267; /* Lighter orange on hover */
+}
+
+.card-button:active {
+  background-color: #E48A3B; /* Darker orange when active */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 1rem;
+  }
+
+  .admin-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-card {
+    padding: 1.5rem;
+  }
+} 
