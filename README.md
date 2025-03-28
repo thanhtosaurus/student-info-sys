@@ -95,6 +95,79 @@ This will:
 - Build the React client
 - Prepare the server for production
 
+## API Documentation
+
+### Swagger Documentation
+The API is documented using Swagger/OpenAPI. You can access the interactive documentation at:
+```bash
+http://localhost:5000/api-docs
+```
+
+### Using Swagger UI
+1. Start the server:
+```bash
+npm start
+```
+
+2. Open your browser and navigate to:
+```bash
+http://localhost:5000/api-docs
+```
+
+3. You'll see the Swagger UI with:
+   - All available endpoints
+   - Request/response schemas
+   - Authentication requirements
+   - Interactive testing interface
+
+### Development
+
+To update the Swagger documentation:
+
+1. Install dependencies:
+```bash
+npm install swagger-jsdoc swagger-ui-express
+```
+
+2. Update swagger annotations in your route files:
+```javascript
+/**
+ * @swagger
+ * /api/your-endpoint:
+ *   get:
+ *     summary: Your endpoint description
+ *     tags: [Your Tag]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
+```
+
+3. Restart the server to see changes
+
+### Swagger Configuration
+
+The Swagger configuration is in `server/swagger.js`:
+```javascript
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Student Information System API',
+      version: '1.0.0'
+    }
+  },
+  apis: ['./routes/*.js']
+};
+```
+### Best Practices
+
+1. Keep documentation up to date
+2. Include request/response examples
+3. Document error responses
+4. Use meaningful tags
+5. Add descriptions for all parameters
+
 ## 🔄 Continuous Integration
 
 This project uses GitHub Actions for CI/CD. The workflow is defined in `.github/workflows/ci.yml`.

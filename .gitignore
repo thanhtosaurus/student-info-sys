@@ -4,9 +4,13 @@ node_modules
 **/node_modules
 client/node_modules
 server/node_modules
+server/coverage
+server/*.xml
+
 
 # Other common ignores
 .env
 .DS_Store
 build/
 dist/
+
