@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import AddCourse from './AddCourse';
+import EditCourseInfo from './EditCourseInfo';
 
 const CatalogLanding = () => {
   const [selectedTask, setSelectedTask] = useState('');
 
+  // Frontend-only: using in-memory state for course data
+  // This is temporary for UI testing
+  const [courses, setCourses] = useState([]);
   const renderContent = () => {
     switch (selectedTask) {
       case 'add':
-        return <AddCourse onBackClick={() => setSelectedTask('')} />;
+        return <AddCourse courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} />;
       case 'edit':
-        return <p>🔧 Edit Course Info – (Coming soon)</p>;
+        return <EditCourseInfo courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} />;
       case 'delete':
         return <p>🗑️ Delete Sections – (Coming soon)</p>;
       case 'view':

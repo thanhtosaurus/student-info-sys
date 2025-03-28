@@ -1,31 +1,37 @@
 import React, { useState } from 'react';
 
-export default function AddCourse() {
+// Frontend only: form component to add a new course
+// This uses local state and is not yet connected to backend
+export default function AddCourse({ courses, setCourses, onBackClick }) {
+  // Form state for new course input
   const [form, setForm] = useState({
     course_code: '',
     course_title: '',
     description: '',
     units: '',
-    prerequisites: []
+    prerequisites: [],
+    term: '',         
+    year: '' ,         
   });
 
-  const [tempPrereq, setTempPrereq] = useState('');
-  const [courses, setCourses] = useState([]);
+  const [tempPrereq, setTempPrereq] = useState(''); 
 
+  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-
+  // Handle adding a prerequisite
   const handleAddPrerequisite = () => {
     if (tempPrereq.trim()) {
       setForm({ ...form, prerequisites: [...form.prerequisites, tempPrereq.trim()] });
       setTempPrereq('');
     }
   };
-
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+     // Add form data to the shared courses state (frontend only)
     setCourses([...courses, form]);
     setForm({
       course_code: '',
@@ -86,6 +92,31 @@ export default function AddCourse() {
             style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
           />
 
+          <label>Term:</label>
+          <select
+            name="term"
+            value={form.term}
+            onChange={handleChange}
+            required
+            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+          >
+            <option value="">Select term</option>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+            <option value="Fall">Fall</option>
+          </select>
+
+          <label>Year:</label>
+          <input
+            type="number"
+            name="year"
+            value={form.year}
+            onChange={handleChange}
+            placeholder="e.g., 2025"
+            required
+            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+          />
+
           <label>Prerequisites:</label>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
             <input
@@ -99,30 +130,61 @@ export default function AddCourse() {
               Add
             </button>
           </div>
-        </div>
 
-        {/* Show added prerequisites */}
-        {form.prerequisites.length > 0 && (
-          <div style={{ textAlign: 'left', marginBottom: '10px' }}>
-            <strong>Added Prerequisites:</strong>
-            <ul>
-              {form.prerequisites.map((code, index) => (
-                <li key={index}>{code}</li>
-              ))}
-            </ul>
+          {form.prerequisites.length > 0 && (
+            <div style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <strong>Added Prerequisites:</strong>
+              <ul>
+                {form.prerequisites.map((code, index) => (
+                  <li key={index}>{code}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+            <button type="button" onClick={onBackClick} style={{ padding: '10px 20px', backgroundColor: 'gray', color: 'white' }}>
+              Back
+            </button>
+            <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white' }}>
+              Add Course
+            </button>
           </div>
-        )}
-
-        {/* Form buttons */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-          <button type="button" style={{ padding: '10px 20px', backgroundColor: 'gray', color: 'white' }}>
-            Back
-          </button>
-          <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white' }}>
-            Add Course
-          </button>
         </div>
       </form>
+
+      {/* Course List Table*/}
+      {courses.length > 0 && (
+        <div style={{ marginTop: '30px', textAlign: 'left' }}>
+          <h3>Course List</h3>
+          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Units</th>
+                <th>Prerequisites</th>
+                <th>Term</th>
+                <th>Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.map((course, index) => (
+                <tr key={index}>
+                  <td>{course.course_code}</td>
+                  <td>{course.course_title}</td>
+                  <td>{course.description}</td>
+                  <td>{course.units}</td>
+                  <td>{course.prerequisites.join(', ')}</td>
+                  <td>{course.term}</td>
+                  <td>{course.year}</td>  
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
