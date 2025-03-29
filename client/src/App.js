@@ -2,14 +2,14 @@
 import React from 'react';
 import './App.css';
 import Login from './pages/Login'; //Login page
-import AdminDashboard from './pages/Admin/AdminDashboard'; //Admin Dashboard page
+import AdminDashboard from './pages/AdminDashboard'; //Admin Dashboard page
 
 
 function App() {
   return (
     <div className="App">
-      <Login />
-      <AdminDashboard />
+      <Login/>
+      <AdminDashboard/>
     </div>
   );
 }
