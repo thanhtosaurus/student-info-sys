@@ -157,7 +157,7 @@ export default function AddCourse({ courses, setCourses, onBackClick }) {
       {courses.length > 0 && (
         <div style={{ marginTop: '30px', textAlign: 'left' }}>
           <h3>Course List</h3>
-          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', color: '#000' }}>
             <thead>
               <tr>
                 <th>Code</th>
