@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="5" failures="0" errors="0" time="2.982">
+  <testsuite name="Supabase Connection" errors="0" failures="0" skipped="0" timestamp="2025-03-27T17:57:41" time="2.809" tests="5">
+    <testcase classname="Supabase Connection should connect to Supabase" name="Supabase Connection should connect to Supabase" time="0.537">
+    </testcase>
+    <testcase classname="Supabase Connection should execute a simple query" name="Supabase Connection should execute a simple query" time="0.129">
+    </testcase>
+    <testcase classname="Supabase Connection should handle invalid query gracefully" name="Supabase Connection should handle invalid query gracefully" time="0.144">
+    </testcase>
+    <testcase classname="Supabase Connection should have service role access" name="Supabase Connection should have service role access" time="0.091">
+    </testcase>
+    <testcase classname="Supabase Connection should bypass RLS with service role" name="Supabase Connection should bypass RLS with service role" time="0.184">
+    </testcase>
+  </testsuite>
+</testsuites>
