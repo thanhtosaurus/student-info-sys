@@ -2,6 +2,9 @@
 import React, { useState } from 'react';
 import '../styles/Login.css';
 
+// Set this to true to bypass login validation for testing
+const TESTING_MODE = true;
+
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
     username: '',
@@ -30,21 +33,24 @@ const Login = ({ onLogin }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation
-    const newErrors = {};
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 3) {
-      newErrors.password = 'Password must be at least 3 characters';
-    }
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+    // Skip validation if in testing mode
+    if (!TESTING_MODE) {
+      // Basic validation
+      const newErrors = {};
+      if (!formData.username.trim()) {
+        newErrors.username = 'Username is required';
+      }
+      
+      if (!formData.password) {
+        newErrors.password = 'Password is required';
+      } else if (formData.password.length < 3) {
+        newErrors.password = 'Password must be at least 3 characters';
+      }
+      
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
     }
     
     // Depending on the user's role, we will redirect to the appropriate dashboard here
