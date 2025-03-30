@@ -1,8 +1,8 @@
-// src/components/Login.js
+// src/pages/Login.js
 import React, { useState } from 'react';
 import '../styles/Login.css';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -49,8 +49,10 @@ const Login = () => {
     
     // Depending on the user's role, we will redirect to the appropriate dashboard here
     // For now, we'll just alert a success message
-    alert(`Login attempted for user: ${formData.username}`);
-
+    alert(`Login successful for user: ${formData.username}`);
+    
+    // Call the onLogin function to update authentication state in the parent component
+    onLogin();
   };
   
   return (
@@ -85,26 +87,21 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Enter your password"
               className={errors.password ? 'error' : ''}
-
             />
             <div className="show-password-container">
-            <input
+              <input
                 type="checkbox"
                 id="showPassword"
                 checked={showPassword}
                 onChange={() => setShowPassword(!showPassword)}
-            />
-            <label htmlFor="showPassword">Show password</label>
+              />
+              <label htmlFor="showPassword">Show password</label>
             </div>
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
           
-
-          
           <button type="submit" className="login-button">Login</button>
         </form>
-        
-
       </div>
     </div>
   );
