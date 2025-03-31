@@ -1,8 +1,11 @@
-// src/components/Login.js
+// src/pages/Login.js
 import React, { useState } from 'react';
 import '../styles/Login.css';
 
-const Login = () => {
+// Set this to true to bypass login validation for testing
+const TESTING_MODE = true;
+
+const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -30,27 +33,32 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation
-    const newErrors = {};
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username is required';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 3) {
-      newErrors.password = 'Password must be at least 3 characters';
-    }
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
+    // Skip validation if in testing mode
+    if (!TESTING_MODE) {
+      // Basic validation
+      const newErrors = {};
+      if (!formData.username.trim()) {
+        newErrors.username = 'Username is required';
+      }
+      
+      if (!formData.password) {
+        newErrors.password = 'Password is required';
+      } else if (formData.password.length < 3) {
+        newErrors.password = 'Password must be at least 3 characters';
+      }
+      
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
+      }
     }
     
     // Depending on the user's role, we will redirect to the appropriate dashboard here
     // For now, we'll just alert a success message
-    alert(`Login attempted for user: ${formData.username}`);
-
+    alert(`Login successful for user: ${formData.username}`);
+    
+    // Call the onLogin function to update authentication state in the parent component
+    onLogin();
   };
   
   return (
@@ -85,26 +93,21 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Enter your password"
               className={errors.password ? 'error' : ''}
-
             />
             <div className="show-password-container">
-            <input
+              <input
                 type="checkbox"
                 id="showPassword"
                 checked={showPassword}
                 onChange={() => setShowPassword(!showPassword)}
-            />
-            <label htmlFor="showPassword">Show password</label>
+              />
+              <label htmlFor="showPassword">Show password</label>
             </div>
             {errors.password && <span className="error-message">{errors.password}</span>}
           </div>
           
-
-          
           <button type="submit" className="login-button">Login</button>
         </form>
-        
-
       </div>
     </div>
   );
