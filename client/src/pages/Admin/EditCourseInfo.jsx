@@ -52,7 +52,7 @@ export default function EditCourseInfo({ courses, setCourses, onBackClick }) {
       <h2>Edit Course Info</h2>
 
       {/* Course Table */}
-      <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', color: '#000' }}>
         <thead>
           <tr>
             <th>Code</th>

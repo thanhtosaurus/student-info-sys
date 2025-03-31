@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import AddCourse from './AddCourse';
 import EditCourseInfo from './EditCourseInfo';
-
+import DeleteCourse from './DeleteSection';
 const CatalogLanding = () => {
   const [selectedTask, setSelectedTask] = useState('');
 
   // Frontend-only: using in-memory state for course data
   // This is temporary for UI testing
   const [courses, setCourses] = useState([]);
+
   const renderContent = () => {
     switch (selectedTask) {
       case 'add':
@@ -15,7 +16,14 @@ const CatalogLanding = () => {
       case 'edit':
         return <EditCourseInfo courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} />;
       case 'delete':
-        return <p>🗑️ Delete Sections – (Coming soon)</p>;
+          return (
+            <DeleteCourse
+              courses={courses}
+              setCourses={setCourses}
+              onBackClick={() => setSelectedTask('')}
+            />
+          );
+
       case 'view':
         return <p>📚 View Course Catalog – (Coming soon)</p>;
       default:
