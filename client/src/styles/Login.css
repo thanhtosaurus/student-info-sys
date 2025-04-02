@@ -6,9 +6,82 @@
     min-height: 100vh;
     background-color: #0F2A4A; /* CSUF dark navy blue */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .login-card {
+    position: relative;
+}
+
+.testing-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggle-label {
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Toggle Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #F49E4C; /* CSUF orange */
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #F49E4C;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.login-card {
     width: 100%;
     max-width: 420px;
     background-color: #1B3B66; /* Slightly lighter navy blue */
@@ -16,38 +89,38 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     padding: 2.5rem;
-  }
-  
-  .login-header {
+}
+
+.login-header {
     text-align: center;
     margin-bottom: 2.5rem;
-  }
-  
-  .login-header h1 {
+}
+
+.login-header h1 {
     color: #FFFFFF;
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
-  }
-  
-  .login-form {
+}
+
+.login-form {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     font-size: 0.9rem;
     font-weight: 500;
     color: #E6E6E6;
-  }
-  
-  .form-group input {
+}
+
+.form-group input {
     padding: 12px 16px;
     border: 1px solid #3D5A80;
     border-radius: 6px;
@@ -55,29 +128,29 @@
     background-color: #0F2A4A;
     color: #FFFFFF;
     transition: border-color 0.3s;
-  }
-  
-  .form-group input:focus {
+}
+
+.form-group input:focus {
     outline: none;
     border-color: #F49E4C; /* CSUF orange accent */
     box-shadow: 0 0 0 2px rgba(244, 158, 76, 0.2);
-  }
-  
-  .form-group input::placeholder {
+}
+
+.form-group input::placeholder {
     color: #8EADD5;
-  }
-  
-  .form-group input.error {
+}
+
+.form-group input.error {
     border-color: #FF6B6B;
-  }
-  
-  .error-message {
+}
+
+.error-message {
     color: #FF6B6B;
     font-size: 0.8rem;
     margin-top: 0.25rem;
-  }
-  
-  .login-button {
+}
+
+.login-button {
     background-color: #F49E4C; /* CSUF orange */
     color: #0F2A4A;
     border: none;
@@ -88,35 +161,35 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 1.5rem;
-  }
-  
-  .login-button:hover {
-    background-color: #F7B267; /* Lighter orange on hover */
-  }
-  
-  .login-button:active {
-    background-color: #E48A3B; /* Darker orange when active */
-  }
+}
 
-  /* For the show password container */
-  .show-password-container {
+.login-button:hover {
+    background-color: #F7B267; /* Lighter orange on hover */
+}
+
+.login-button:active {
+    background-color: #E48A3B; /* Darker orange when active */
+}
+
+/* For the show password container */
+.show-password-container {
     display: flex;
     justify-content: flex-start;
     gap: 0.5rem;
-  }
+}
 
-  /* For the username anpassword label */
-  label{
+/* For the username anpassword label */
+label{
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 0.5rem;
-  }
-  
-  /* For smaller screens */
-  @media (max-width: 480px) {
+}
+
+/* For smaller screens */
+@media (max-width: 480px) {
     .login-card {
-      padding: 2rem 1.5rem;
-      margin: 1rem;
+        padding: 2rem 1.5rem;
+        margin: 1rem;
     }
-  }
+}
