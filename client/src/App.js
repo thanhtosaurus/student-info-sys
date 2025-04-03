@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/Admin/AdminDashboard'; // For catalog management
 import AdminPortal from './pages/AdminPortal';
 import ViewTranscript from './pages/Transcript/ViewTranscript';
+import EditTranscript from './pages/Transcript/EditTranscript'; //For Updating Transcript
 import ViewUsers from './pages/UserManagement/ViewUsers';
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
@@ -77,7 +78,13 @@ function App() {
                 <Navigate to="/" />
             } 
           />
-          
+
+           {/* Temporary test route for EditTranscript */}
+           <Route
+            path="/test-edit-transcript"
+            element={<EditTranscript onClose={() => console.log('Closed')} />}
+          />
+         
           {/* Redirect any unknown routes to home */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
