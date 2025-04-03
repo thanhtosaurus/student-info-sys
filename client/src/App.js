@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/Admin/AdminDashboard'; // For catalog management
 import AdminPortal from './pages/AdminPortal';
 import ViewTranscript from './pages/Transcript/ViewTranscript';
+import ViewUsers from './pages/UserManagement/ViewUsers';
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
 
@@ -67,17 +68,15 @@ function App() {
             } 
           />
 
-          {/* User Management route - when component is ready */}
-          {/* 
+          {/* User Management route */}
           <Route 
             path="/user-management" 
             element={
               isAuthenticated ? 
-                <UserManagement onLogout={handleLogout} /> : 
+                <ViewUsers /> : 
                 <Navigate to="/" />
             } 
           />
-          */}
           
           {/* Redirect any unknown routes to home */}
           <Route path="*" element={<Navigate to="/" />} />
