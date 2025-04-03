@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Frontend only: form component to add a new course
 // This uses local state and is not yet connected to backend
-export default function AddCourse({ courses, setCourses, onBackClick }) {
+export default function AddCourse({ courses, setCourses, onBackClick, selectedYear }) {
   // Form state for new course input
   const [form, setForm] = useState({
     course_code: '',
@@ -11,14 +11,22 @@ export default function AddCourse({ courses, setCourses, onBackClick }) {
     units: '',
     prerequisites: [],
     term: '',         
-    year: '' ,         
+    year: selectedYear || '', // Set year by default         
   });
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      year: selectedYear,
+    }));
+  }, [selectedYear]);
 
   const [tempPrereq, setTempPrereq] = useState(''); 
 
   // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Prevent year from being changed
+    if (name === 'year') return;
     setForm({ ...form, [name]: value });
   };
   // Handle adding a prerequisite
@@ -31,20 +39,23 @@ export default function AddCourse({ courses, setCourses, onBackClick }) {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-     // Add form data to the shared courses state (frontend only)
-    setCourses([...courses, form]);
+    // Add form data to the shared courses state (frontend only)
+    setCourses([...courses, { ...form, year: selectedYear }]); // Ensure year is set to selectedYear
     setForm({
       course_code: '',
       course_title: '',
       description: '',
       units: '',
-      prerequisites: []
+      prerequisites: [],
+      term: '',
+      year: selectedYear
     });
   };
 
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-      <h2>Add New Course</h2>
+    <h2>Catalog Year: {selectedYear}</h2>  
+      <h3>Add New Course</h3>
       <form onSubmit={handleSubmit}>
         <div style={{ textAlign: 'left' }}>
           <label>Course Code:</label>
@@ -110,10 +121,9 @@ export default function AddCourse({ courses, setCourses, onBackClick }) {
           <input
             type="number"
             name="year"
-            value={form.year}
-            onChange={handleChange}
-            placeholder="e.g., 2025"
-            required
+            value={selectedYear}
+            readOnly
+            disabled
             style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
           />
 
@@ -154,9 +164,11 @@ export default function AddCourse({ courses, setCourses, onBackClick }) {
       </form>
 
       {/* Course List Table*/}
-      {courses.length > 0 && (
-        <div style={{ marginTop: '30px', textAlign: 'left' }}>
-          <h3>Course List</h3>
+      <div style={{ marginTop: '30px', textAlign: 'left' }}>
+        <h3>Course List</h3>
+        {courses.length === 0 ? (
+          <p>No courses available.</p>
+        ) : (
           <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', color: '#000' }}>
             <thead>
               <tr>
@@ -183,8 +195,8 @@ export default function AddCourse({ courses, setCourses, onBackClick }) {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
