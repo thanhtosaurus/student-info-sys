@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-/server/node_modules
-/server/.env
-=======
 # Node dependencies
 node_modules
 /node_modules
@@ -10,7 +6,7 @@ client/node_modules
 server/node_modules
 server/coverage
 server/*.xml
-
+package-lock.json
 
 # Other common ignores
 .env
@@ -18,4 +14,5 @@ server/*.xml
 build/
 dist/
 
->>>>>>> 223fd2c75007fbb6eab59534e7109cbc8221837d
+node_modules/
+node_modu
