@@ -1,5 +1,5 @@
 // API Configuration
-export const API_URL = 'http://localhost:5000/api';
+export const API_URL = 'http://localhost:5001/api';
 
 // Supabase Configuration
 export const SUPABASE_URL = 'https://asckwevrpijncmxixicc.supabase.co';
