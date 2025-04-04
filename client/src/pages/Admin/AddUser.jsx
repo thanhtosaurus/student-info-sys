@@ -7,7 +7,11 @@ const AddUser = ({ onBackClick }) => {
     username: '',
     password: '',
     email: '',
-    role: 'student' // default role
+    role: '', // changed to empty string
+    grade_level: '', // changed to empty string
+    major: '', // changed to empty string
+    units_completed: 0,
+    department: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -30,10 +34,24 @@ const AddUser = ({ onBackClick }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // If role is changing, clear role-specific fields
+    if (name === 'role') {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        // Clear role-specific fields
+        grade_level: '',
+        major: '',
+        units_completed: 0,
+        department: ''
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
     
     // Clear error when user starts typing
     if (errors[name]) {
@@ -75,6 +93,18 @@ const AddUser = ({ onBackClick }) => {
       newErrors.role = 'Role is required';
     }
 
+    if (!formData.grade_level) {
+      newErrors.grade_level = 'Grade level is required';
+    }
+
+    if (!formData.major) {
+      newErrors.major = 'Major is required';
+    }
+
+    if (formData.units_completed < 0) {
+      newErrors.units_completed = 'Units completed cannot be negative';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -95,7 +125,11 @@ const AddUser = ({ onBackClick }) => {
       username: '',
       password: '',
       email: '',
-      role: 'student'
+      role: '', // changed to empty string
+      grade_level: '', // changed to empty string
+      major: '', // changed to empty string
+      units_completed: 0,
+      department: ''
     });
   };
 
@@ -104,6 +138,23 @@ const AddUser = ({ onBackClick }) => {
       <h2>Add New User</h2>
       
       <form onSubmit={handleSubmit}>
+        <div style={{ marginBottom: '15px' }}>
+          <label style={{ display: 'block', marginBottom: '5px' }}>Role:</label>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            style={{ width: '100%', padding: '8px', color: formData.role ? 'black' : '#666' }}
+            className={errors.role ? 'error' : ''}
+          >
+            <option value="" disabled>Select Role</option>
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+            <option value="professor">Professor</option>
+          </select>
+          {errors.role && <div style={{ color: 'red' }}>{errors.role}</div>}
+        </div>
+
         <div style={{ marginBottom: '15px' }}>
           <label style={{ display: 'block', marginBottom: '5px' }}>First Name:</label>
           <input
@@ -204,21 +255,85 @@ const AddUser = ({ onBackClick }) => {
           {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Role:</label>
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            style={{ width: '100%', padding: '8px' }}
-            className={errors.role ? 'error' : ''}
-          >
-            <option value="student">Student</option>
-            <option value="admin">Admin</option>
-            <option value="professor">Professor</option>
-          </select>
-          {errors.role && <div style={{ color: 'red' }}>{errors.role}</div>}
-        </div>
+        {formData.role === 'student' && (
+          <>
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Grade Level:</label>
+              <select
+                name="grade_level"
+                value={formData.grade_level}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '8px', color: formData.grade_level ? 'black' : '#666' }}
+                className={errors.grade_level ? 'error' : ''}
+              >
+                <option value="" disabled>Select Grade Level</option>
+                <option value="freshman">Freshman</option>
+                <option value="sophomore">Sophomore</option>
+                <option value="junior">Junior</option>
+                <option value="senior">Senior</option>
+                <option value="graduate">Graduate</option>
+                <option value="super_senior">Super Senior</option>
+              </select>
+              {errors.grade_level && <div style={{ color: 'red' }}>{errors.grade_level}</div>}
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Major:</label>
+              <select
+                name="major"
+                value={formData.major}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '8px', color: formData.major ? 'black' : '#666' }}
+                className={errors.major ? 'error' : ''}
+              >
+                <option value="" disabled>Select Major</option>
+                <option value="undeclared">Undeclared</option>
+                <option value="computer_science">Computer Science</option>
+                <option value="biology">Biology</option>
+                <option value="economics">Economics</option>
+              </select>
+              {errors.major && <div style={{ color: 'red' }}>{errors.major}</div>}
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Units Completed:</label>
+              <input
+                type="number"
+                name="units_completed"
+                value={formData.units_completed}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '8px' }}
+                className={errors.units_completed ? 'error' : ''}
+                min="0"
+                step="0.5"
+              />
+              {errors.units_completed && <div style={{ color: 'red' }}>{errors.units_completed}</div>}
+            </div>
+          </>
+        )}
+
+        {formData.role === 'professor' && (
+          <div style={{ marginBottom: '15px' }}>
+            <label style={{ display: 'block', marginBottom: '5px' }}>Department:</label>
+            <select
+              name="department"
+              value={formData.department}
+              onChange={handleChange}
+              style={{ width: '100%', padding: '8px', color: formData.department ? 'black' : '#666' }}
+              className={errors.department ? 'error' : ''}
+            >
+              <option value="" disabled>Select Department</option>
+              <option value="computer_science">Computer Science</option>
+              <option value="biology">Biology</option>
+              <option value="economics">Economics</option>
+              <option value="mathematics">Mathematics</option>
+              <option value="physics">Physics</option>
+              <option value="chemistry">Chemistry</option>
+              <option value="engineering">Engineering</option>
+            </select>
+            {errors.department && <div style={{ color: 'red' }}>{errors.department}</div>}
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <button
