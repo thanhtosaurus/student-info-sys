@@ -294,6 +294,24 @@ const supabase = require('../db');
  *                   example: "Professor update error"
  */
 
+
+
+/**
+ * @swagger
+ * /api/admin/checkUsername/{username}:
+ *   get:
+ *     summary: Check if a username exists
+ *     tags: [Admin]
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Username availability status
+=======
 /**
  * @swagger
  * /catalogs/{catalog_year}:
@@ -402,6 +420,7 @@ const supabase = require('../db');
  *                 error:
  *                   type: string
  *                   example: Failed to create catalog
+
  */
 
 
@@ -410,6 +429,28 @@ router.get('/users', async (req, res) => {
     if (error) return res.status(500).json({ error: error.message });
     res.status(200).json(data);
 });
+
+
+router.get('/checkUsername/:username', async (req, res) => {
+    try {
+        const { username } = req.params;
+        const { data, error } = await supabase
+            .from('users')
+            .select('username')
+            .eq('username', username)
+            .single();
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+            return res.status(500).json({ error: error.message });
+        }
+
+        res.status(200).json({ exists: !!data });
+    } catch (err) {
+        console.error('Username check error:', err.message);
+        res.status(500).json({ error: 'Failed to check username' });
+    }
+});
+
 
 router.get('/users/:id', async (req, res) => {
     const { id } = req.params;

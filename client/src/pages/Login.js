@@ -89,7 +89,7 @@ const Login = ({ onLogin }) => {
           password: formData.password
         }),
       });
-
+      
       const data = await response.json();
 
       if (!response.ok) {
@@ -111,7 +111,7 @@ const Login = ({ onLogin }) => {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="login-container">
       <div className="testing-mode-toggle">
