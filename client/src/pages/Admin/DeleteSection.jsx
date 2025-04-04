@@ -1,4 +1,5 @@
 import React from 'react';
+import YearDisplay from '../../components/YearDisplay';
 
 const DeleteCourse = ({ courses, setCourses, onBackClick }) => {
   const handleDelete = (index) => {
@@ -14,6 +15,7 @@ const DeleteCourse = ({ courses, setCourses, onBackClick }) => {
 
   return (
     <div style={{ textAlign: 'center' }}>
+      <YearDisplay />
       <h2>Delete Sections</h2> 
       {courses.length === 0 ? (
         <p>No courses available.</p>

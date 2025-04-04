@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import YearDisplay from '../../components/YearDisplay';
 
 // Frontend only: form component to add a new course
 // This uses local state and is not yet connected to backend
@@ -54,8 +55,8 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
 
   return (
     <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
-    <h2>Catalog Year: {selectedYear}</h2>  
-      <h3>Add New Course</h3>
+      <YearDisplay />
+      <h3>Create Course Catalog - Academic Year: {selectedYear}</h3>
       <form onSubmit={handleSubmit}>
         <div style={{ textAlign: 'left' }}>
           <label>Course Code:</label>

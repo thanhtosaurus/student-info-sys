@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import AddCourse from './AddCourse';
 import EditCourseInfo from './EditCourseInfo';
 import DeleteCourse from './DeleteSection';
-const CatalogLanding = ({ selectedYear,onBackToYearSelection }) => {
+import YearDisplay from '../../components/YearDisplay';
+
+const CatalogLanding = ({ selectedYear, onBackToYearSelection }) => {
   const [selectedTask, setSelectedTask] = useState('');
 
   // Frontend-only: using in-memory state for course data
@@ -24,11 +26,61 @@ const CatalogLanding = ({ selectedYear,onBackToYearSelection }) => {
           );
 
       case 'view':
-        return <p>📚 View Course Catalog – (Coming soon)</p>;
+        return (
+          <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+            <YearDisplay />
+            <h2>Course Catalog</h2>
+            {courses.length === 0 ? (
+              <p>No courses available for this academic year.</p>
+            ) : (
+              <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', color: '#000', marginTop: '20px' }}>
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Units</th>
+                    <th>Prerequisites</th>
+                    <th>Term</th>
+                    <th>Year</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {courses.map((course, index) => (
+                    <tr key={index}>
+                      <td>{course.course_code}</td>
+                      <td>{course.course_title}</td>
+                      <td>{course.description}</td>
+                      <td>{course.units}</td>
+                      <td>{course.prerequisites.join(', ')}</td>
+                      <td>{course.term}</td>
+                      <td>{course.year}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+            <button 
+              onClick={() => setSelectedTask('')} 
+              style={{ 
+                marginTop: '20px',
+                padding: '10px 20px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Back
+            </button>
+          </div>
+        );
       default:
         return (
         
           <div style={styles.container}>
+          <YearDisplay />
           <h2 style={styles.subheading}>Catalog Management</h2>
 
           <div style={styles.buttonGroup}>

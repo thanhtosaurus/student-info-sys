@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import YearDisplay from '../../components/YearDisplay';
 
 export default function EditCourseInfo({ courses, setCourses, onBackClick, selectedYear }) {
   // Track which course is currently being edited
@@ -51,6 +52,7 @@ export default function EditCourseInfo({ courses, setCourses, onBackClick, selec
 
   return (
     <div>
+      <YearDisplay />
       <h2>Edit Course Info</h2>
 
       {/* Course Table */}
