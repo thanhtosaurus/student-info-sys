@@ -340,6 +340,69 @@ const supabase = require('../db');
  *                   description: Error message
  */
 
+/**
+ * @swagger
+ * /createCatalog:
+ *   post:
+ *     summary: Create a new catalog
+ *     description: Creates a new catalog entry with the specified catalog year
+ *     tags:
+ *       - Catalogs
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - catalog_year
+ *             properties:
+ *               catalog_year:
+ *                 type: string
+ *                 description: The year of the catalog (e.g., "2023")
+ *                 example: "2023"
+ *     responses:
+ *       201:
+ *         description: Catalog created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Catalog created successfully
+ *                 catalog:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       example: 123e4567-e89b-12d3-a456-426614174000
+ *                     catalog_year:
+ *                       type: string
+ *                       example: "2023"
+ *       400:
+ *         description: Bad request - validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Catalog year is required
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Failed to create catalog
+ */
 
 
 router.get('/users', async (req, res) => {
