@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function EditCourseInfo({ courses, setCourses, onBackClick }) {
+export default function EditCourseInfo({ courses, setCourses, onBackClick, selectedYear }) {
   // Track which course is currently being edited
   const [editIndex, setEditIndex] = useState(null);
 
@@ -16,12 +16,14 @@ export default function EditCourseInfo({ courses, setCourses, onBackClick }) {
   // Called when the Edit button is clicked
   const handleEdit = (index) => {
     setEditIndex(index); // Mark which course we're editing
-    setEditForm({ ...courses[index] }); // Load that course's data into the form
+    setEditForm({ ...courses[index], year: selectedYear }); // Always set year to selectedYear
   };
 
   // Called when typing into the form fields
   const handleChange = (e) => {
     const { name, value } = e.target;
+    // Prevent year from being changed
+    if (name === 'year') return;
     setEditForm({ ...editForm, [name]: value });
   };
 
@@ -127,11 +129,13 @@ export default function EditCourseInfo({ courses, setCourses, onBackClick }) {
                   </td>
                   <td>
                     <input
+                      type="number"
                       name="year"
-                      value={editForm.year}
-                      onChange={handleChange}
+                      value={selectedYear}
+                      readOnly
+                      disabled
                     />
-                    </td>
+                  </td>
                   <td>
                     <button onClick={handleSave}>Save</button>{' '}
                     <button onClick={handleCancel}>Cancel</button>
