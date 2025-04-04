@@ -158,20 +158,8 @@ const AddUser = ({ onBackClick }) => {
     setSuccess('');
 
     try {
-      // Validate required fields based on role
-      if (!formData.email || !formData.password || !formData.username || 
-          !formData.first_name || !formData.last_name || !formData.role) {
-        setError('Please fill in all required fields');
-        return;
-      }
-
-      // Additional validation for role-specific fields
-      if (formData.role === 'professor' && !formData.department) {
-        setError('Department is required for professors');
-        return;
-      }
-      if (formData.role === 'student' && (!formData.major_id || !formData.grade_level)) {
-        setError('Major and grade level are required for students');
+      // Use the validateForm function
+      if (!validateForm()) {
         return;
       }
 
