@@ -165,4 +165,60 @@ router.put('/updateProfessor/:id', async (req, res) => {
     }
 });
 
+// ===== Catalog ===== //
+
+// Create catalog
+router.post('/createCatalog', async (req, res) => {
+    try {
+        const { catalog_year } = req.body;
+
+        // Input validation
+        if (!catalog_year) {
+            return res.status(400).json({ error: 'Catalog year is required' });
+        }
+
+        // Check if catalog_year exists already
+        const { data, error, count } = await supabase
+            .from('catalog')
+            .select('*', { count: 'exact' })
+            .eq('catalog_year', catalog_year)
+            .limit(1);
+
+        // Check for errors
+        if (error) {
+            console.error('Supabase catalog read error:', error);
+            return res.status(500).json({ error: 'Failed to read catalog table' });
+        }
+
+        // Insert additional user data into users table
+        const { data: inserted_catalog, error: insert_error } = await supabase
+            .from('catalog')
+            .insert([
+                {
+                    catalog_year: catalog_year,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                }
+            ])
+            .select()
+            .single();
+        
+        if (insert_error) {
+            console.log(insert_error)
+            return res.status(500).json({ error: 'Failed to create catalog' });
+        }
+
+        res.status(201).json({
+            message: 'Catalog created successfully',
+            catalog: {
+                id: inserted_catalog.id,
+                catalog_year: inserted_catalog.catalog_year
+            }
+        });
+    } catch (err) {
+        console.error('Catalog creation error:', err.message);
+        res.status(500).json({ error: 'Catalog creation error' });
+    }
+});
+
 module.exports = router;
