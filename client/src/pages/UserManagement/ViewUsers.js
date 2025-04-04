@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
+
 import AddUser from './AddUser';
+
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [showAddUser, setShowAddUser] = useState(false);
+
+
 
   useEffect(() => {
     fetchUsers();
@@ -33,6 +38,7 @@ const ViewUsers = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+
   if (showAddUser) {
     return <AddUser onBackClick={() => setShowAddUser(false)} />;
   }
@@ -56,6 +62,11 @@ const ViewUsers = () => {
           Add New User
         </button>
       </div>
+
+  return (
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Users List</h1>
+
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-300">
           <thead>

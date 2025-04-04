@@ -39,6 +39,7 @@ const supabase = require('../db');
  *     tags: [Admin]
  */
 
+
 /**
  * @swagger
  * /api/admin/checkUsername/{username}:
@@ -56,11 +57,13 @@ const supabase = require('../db');
  *         description: Username availability status
  */
 
+
 router.get('/users', async (req, res) => {
     const { data, error } = await supabase.from('users').select('*');
     if (error) return res.status(500).json({ error: error.message });
     res.status(200).json(data);
 });
+
 
 router.get('/checkUsername/:username', async (req, res) => {
     try {
@@ -81,6 +84,7 @@ router.get('/checkUsername/:username', async (req, res) => {
         res.status(500).json({ error: 'Failed to check username' });
     }
 });
+
 
 router.get('/users/:id', async (req, res) => {
     const { id } = req.params;
