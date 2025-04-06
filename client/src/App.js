@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Login from './pages/Login';
-import AdminDashboard from './pages/Admin/AdminDashboard'; // For catalog management
 import AdminPortal from './pages/AdminPortal';
 import ViewTranscript from './pages/Transcript/ViewTranscript';
-import EditTranscript from './pages/Transcript/EditTranscript'; //For Updating Transcript
+import EditTranscript from './pages/Transcript/EditTranscript';
 import ViewUsers from './pages/UserManagement/ViewUsers';
+import CatalogManagement from './pages/Admin/CatalogManagement';
+import YearSelection from './pages/Admin/YearSelection';
+import CatalogLanding from './pages/Admin/CatalogLanding';
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
 
@@ -51,10 +53,28 @@ function App() {
           
           {/* Catalog Management route (AdminDashboard) */}
           <Route 
-            path="/catalog-management" 
+            path="/admin/catalog" 
             element={
               isAuthenticated ? 
-                <AdminDashboard onLogout={handleLogout} /> : 
+                <CatalogManagement /> : 
+                <Navigate to="/" />
+            } 
+          />
+
+          <Route 
+            path="/admin/catalog/year-selection" 
+            element={
+              isAuthenticated ? 
+                <YearSelection /> : 
+                <Navigate to="/" />
+            } 
+          />
+
+          <Route 
+            path="/admin/catalog/:year" 
+            element={
+              isAuthenticated ? 
+                <CatalogLanding /> : 
                 <Navigate to="/" />
             } 
           />

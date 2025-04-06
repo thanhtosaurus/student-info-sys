@@ -66,7 +66,7 @@ function AdminPortal({ onLogout }) {
           <p>Manage course catalogs, programs, and academic requirements</p>
           <button 
             className="card-button"
-            onClick={() => navigateTo('/catalog-management')}
+            onClick={() => navigateTo('/admin/catalog')}
           >
             Access Catalog Management
           </button>

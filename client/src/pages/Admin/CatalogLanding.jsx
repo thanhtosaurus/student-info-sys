@@ -1,46 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import AddCourse from './AddCourse';
 import EditCourseInfo from './EditCourseInfo';
 import DeleteCourse from './DeleteSection';
-const CatalogLanding = ({ selectedYear,onBackToYearSelection }) => {
-  const [selectedTask, setSelectedTask] = useState('');
+import ViewCourseCatalog from './ViewCourseCatalog';
 
-  // Frontend-only: using in-memory state for course data
-  // This is temporary for UI testing
+const CatalogLanding = () => {
+  const { year } = useParams();
+  const navigate = useNavigate();
+  const [selectedTask, setSelectedTask] = useState('');
   const [courses, setCourses] = useState([]);
+
+  // Add some sample data for testing
+  useEffect(() => {
+    // Only add sample data if there are no courses yet
+    if (courses.length === 0) {
+      setCourses([
+        {
+          course_code: 'CS101',
+          course_title: 'Introduction to Computer Science',
+          description: 'An introductory course to computer science concepts',
+          units: '3',
+          prerequisites: [],
+          term: 'Fall',
+          year: year
+        },
+        {
+          course_code: 'MATH201',
+          course_title: 'Calculus I',
+          description: 'First semester of calculus',
+          units: '4',
+          prerequisites: [],
+          term: 'Fall',
+          year: year
+        }
+      ]);
+    }
+  }, [year]);
+
   const renderContent = () => {
     switch (selectedTask) {
       case 'add':
-        return <AddCourse courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} selectedYear={selectedYear} />;
+        return <AddCourse courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} selectedYear={year} />;
       case 'edit':
-        return <EditCourseInfo courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} />;
+        return <EditCourseInfo courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} selectedYear={year} />;
       case 'delete':
-          return (
-            <DeleteCourse
-              courses={courses}
-              setCourses={setCourses}
-              onBackClick={() => setSelectedTask('')}
-            />
-          );
-
+        return (
+          <DeleteCourse
+            courses={courses}
+            setCourses={setCourses}
+            onBackClick={() => setSelectedTask('')}
+          />
+        );
       case 'view':
-        return <p>📚 View Course Catalog – (Coming soon)</p>;
+        return <ViewCourseCatalog courses={courses} onBackClick={() => setSelectedTask('')} />;
       default:
         return (
-        
           <div style={styles.container}>
-          <h2 style={styles.subheading}>Catalog Management</h2>
-
-          <div style={styles.buttonGroup}>
-            <button style={styles.button} onClick={() => setSelectedTask('add')}>Add New Course</button>
-            <button style={styles.button} onClick={() => setSelectedTask('edit')}>Edit Course Info</button>
-            <button style={styles.button} onClick={() => setSelectedTask('delete')}>Delete Sections</button>
-            <button style={styles.button} onClick={() => setSelectedTask('view')}>View Course Catalog</button>
+            <h2 style={styles.subheading}>Catalog Management - {year}</h2>
+            <div style={styles.buttonGroup}>
+              <button style={styles.button} onClick={() => setSelectedTask('add')}>Add New Course</button>
+              <button style={styles.button} onClick={() => setSelectedTask('edit')}>Edit Course Info</button>
+              <button style={styles.button} onClick={() => setSelectedTask('delete')}>Delete Sections</button>
+              <button style={styles.button} onClick={() => setSelectedTask('view')}>View Course Catalog</button>
+            </div>
           </div>
-        </div>
-              );
-          }
+        );
+    }
   };
+
   const styles = {
     container: {
       textAlign: 'center',
@@ -86,12 +114,11 @@ const CatalogLanding = ({ selectedYear,onBackToYearSelection }) => {
     }
   };
   
-  //"Back" button -> navigate to year selection page
   return (
     <div style={{ textAlign: 'center', marginTop: '30px' }}>
       <button 
         style={styles.backButton} 
-        onClick={onBackToYearSelection}
+        onClick={() => navigate('/admin/catalog/year-selection')}
       >
         ← Back to Year Selection
       </button>
