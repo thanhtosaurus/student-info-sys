@@ -89,6 +89,11 @@ th {
   user-select: none;
 }
 
+td {
+  color: #000;
+  font-weight: 400;
+}
+
 th:hover {
   background-color: #f0f0f0;
 }

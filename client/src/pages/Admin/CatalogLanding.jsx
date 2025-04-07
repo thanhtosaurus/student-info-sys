@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import AddCourse from './AddCourse';
 import EditCourseInfo from './EditCourseInfo';
 import DeleteCourse from './DeleteSection';
-import ViewCourseCatalog from '../../components/ViewCourseCatalog';
+import ViewCourseCatalog from './ViewCourseCatalog';
 
 const CatalogLanding = () => {
   const { year } = useParams();
