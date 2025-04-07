@@ -1,59 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import AddCourse from './AddCourse';
 import EditCourseInfo from './EditCourseInfo';
 import DeleteCourse from './DeleteSection';
-import ViewCourseCatalog from './ViewCourseCatalog';
+import ViewCourseCatalog from '../../components/ViewCourseCatalog';
 
 const CatalogLanding = () => {
   const { year } = useParams();
   const navigate = useNavigate();
   const [selectedTask, setSelectedTask] = useState('');
-  const [courses, setCourses] = useState([]);
-
-  // Add some sample data for testing
-  useEffect(() => {
-    // Only add sample data if there are no courses yet
-    if (courses.length === 0) {
-      setCourses([
-        {
-          course_code: 'CS101',
-          course_title: 'Introduction to Computer Science',
-          description: 'An introductory course to computer science concepts',
-          units: '3',
-          prerequisites: [],
-          term: 'Fall',
-          year: year
-        },
-        {
-          course_code: 'MATH201',
-          course_title: 'Calculus I',
-          description: 'First semester of calculus',
-          units: '4',
-          prerequisites: [],
-          term: 'Fall',
-          year: year
-        }
-      ]);
-    }
-  }, [year]);
 
   const renderContent = () => {
     switch (selectedTask) {
       case 'add':
-        return <AddCourse courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} selectedYear={year} />;
+        return <AddCourse onBackClick={() => setSelectedTask('')} selectedYear={year} />;
       case 'edit':
-        return <EditCourseInfo courses={courses} setCourses={setCourses} onBackClick={() => setSelectedTask('')} selectedYear={year} />;
+        return <EditCourseInfo onBackClick={() => setSelectedTask('')} selectedYear={year} />;
       case 'delete':
-        return (
-          <DeleteCourse
-            courses={courses}
-            setCourses={setCourses}
-            onBackClick={() => setSelectedTask('')}
-          />
-        );
+        return <DeleteCourse onBackClick={() => setSelectedTask('')} />;
       case 'view':
-        return <ViewCourseCatalog courses={courses} onBackClick={() => setSelectedTask('')} />;
+        return <ViewCourseCatalog />;
       default:
         return (
           <div style={styles.container}>
@@ -69,62 +35,63 @@ const CatalogLanding = () => {
     }
   };
 
-  const styles = {
-    container: {
-      textAlign: 'center',
-      padding: '40px 20px',
-      fontFamily: 'Segoe UI, sans-serif',
-    },
-    heading: {
-      fontSize: '36px',
-      marginBottom: '10px',
-    },
-    subheading: {
-      fontSize: '24px',
-      color: '#333',
-      marginBottom: '30px',
-    },
-    buttonGroup: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      gap: '16px',
-    },
-    button: {
-      padding: '12px 20px',
-      fontSize: '16px',
-      backgroundColor: '#007BFF',
-      color: 'white',
-      border: 'none',
-      borderRadius: '6px',
-      cursor: 'pointer',
-      minWidth: '180px',
-      transition: 'background 0.2s ease',
-    },
-    backButton: {
-      padding: '8px 16px',
-      fontSize: '14px',
-      backgroundColor: '#6c757d',
-      color: 'white',
-      border: 'none',
-      borderRadius: '6px',
-      cursor: 'pointer',
-      marginBottom: '20px',
-      transition: 'background 0.2s ease',
-    }
-  };
-  
   return (
-    <div style={{ textAlign: 'center', marginTop: '30px' }}>
+    <div>
       <button 
         style={styles.backButton} 
-        onClick={() => navigate('/admin/catalog/year-selection')}
+        onClick={() => navigate('/admin/catalog')}
       >
-        ← Back to Year Selection
+        ← Back to Catalog Management
       </button>
       {renderContent()}
     </div>
   );
+};
+
+const styles = {
+  container: {
+    textAlign: 'center',
+    padding: '40px 20px',
+    fontFamily: 'Segoe UI, sans-serif',
+    maxWidth: '800px',
+    margin: '0 auto',
+  },
+  subheading: {
+    fontSize: '24px',
+    color: '#333',
+    marginBottom: '30px',
+  },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    alignItems: 'center',
+  },
+  button: {
+    padding: '12px 24px',
+    fontSize: '16px',
+    backgroundColor: '#007BFF',
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    minWidth: '250px',
+    transition: 'background 0.2s ease',
+    '&:hover': {
+      backgroundColor: '#0056b3',
+    },
+  },
+  backButton: {
+    padding: '8px 16px',
+    fontSize: '14px',
+    backgroundColor: '#6c757d',
+    color: 'white',
+    border: 'none',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    marginBottom: '20px',
+    transition: 'background 0.2s ease',
+  }
 };
 
 export default CatalogLanding;
