@@ -655,4 +655,24 @@ router.get('/catalogs/:catalog_year', async (req, res) => {
     res.status(200).json(data);
 });
 
+// Get all courses
+router.get('/courses', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('courses')
+            .select('*')
+            .order('course_code', { ascending: true });
+
+        if (error) {
+            console.error('Error fetching courses:', error);
+            return res.status(500).json({ error: 'Failed to fetch courses' });
+        }
+
+        res.status(200).json(data);
+    } catch (err) {
+        console.error('Server error:', err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;
