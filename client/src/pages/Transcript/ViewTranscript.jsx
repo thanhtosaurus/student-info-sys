@@ -1,27 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../styles/ViewTranscript.css';
 import { supabase } from '../../supabaseClient'; // Import Supabase client
 
 const ViewTranscript = () => {
+  const [userId, setUserId] = useState('');
   const [transcriptData, setTranscriptData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [searchedId, setSearchedId] = useState('');
 
-  useEffect(() => {
-    fetchTranscript();
-  }, []);
+  const handleChange = (e) => {
+    setUserId(e.target.value);
+  };
 
   const fetchTranscript = async () => {
     try {
       setLoading(true);
+      setError('');
       
-      // Execute a raw SQL query directly with a hardcoded ID
+      // Execute a raw SQL query with the provided user ID
       const { data, error } = await supabase.from('enrollments')
         .select(`
           section_id,
           grade
         `)
-        .eq('student_uuid', '83fef30f-e93e-4ba5-bd64-f7bd84aa1b1a');
+        .eq('student_uuid', userId);
 
       if (error) throw error;
 
@@ -86,13 +89,23 @@ const ViewTranscript = () => {
         }
         
         setTranscriptData(fullTranscriptData);
+        setSearchedId(userId);
+      } else {
+        setTranscriptData([]);
+        setError('No transcript data found for this student ID.');
       }
     } catch (error) {
       console.error('Error fetching transcript:', error);
       setError('Failed to fetch transcript. Please try again.');
+      setTranscriptData([]);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetchTranscript();
   };
 
   return (
@@ -100,8 +113,25 @@ const ViewTranscript = () => {
       <div className="transcript-card">
         <div className="transcript-header">
           <h1>View Student Transcript</h1>
-          <p>Viewing transcript for user ID: 83fef30f-e93e-4ba5-bd64-f7bd84aa1b1a</p>
+          <p>Enter the student ID to view their transcript</p>
         </div>
+
+        <form className="transcript-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="userId">Student ID</label>
+            <input
+              type="text"
+              id="userId"
+              name="userId"
+              value={userId}
+              onChange={handleChange}
+              placeholder="Enter number"
+            />
+          </div>
+          <button type="submit" className="search-button" disabled={loading}>
+            {loading ? 'Searching...' : 'Search Transcript'}
+          </button>
+        </form>
       </div>
 
       {/* Transcript Table */}
@@ -109,7 +139,7 @@ const ViewTranscript = () => {
       {error && <div className="error">{error}</div>}
       {transcriptData.length > 0 && (
         <div className="transcript-table">
-          <h3>Course History</h3>
+          <h3>Course History for Student ID: {searchedId}</h3>
           <table>
             <thead>
               <tr>
