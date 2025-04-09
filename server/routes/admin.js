@@ -655,6 +655,16 @@ router.get('/catalogs/:catalog_year', async (req, res) => {
     res.status(200).json(data);
 });
 
+// Add new course section to existing catalog
+router.post('/createCourseSection/:catalogId', async (req, res) => {
+    res.send("Create Course Section not implemented yet!");
+});
+
+// Remove course section from catalog
+router.post('/removeCourseSection/:catalogId', async (req, res) => {
+    res.send("Remove Course Section not implemented yet!");
+});
+
 // Get all courses
 router.get('/courses', async (req, res) => {
     try {
@@ -674,5 +684,18 @@ router.get('/courses', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// Add new course
+router.post('/createCourse', async (req, res) => {
+    res.send("Create Course not implemented yet!");
+});
+
+// Update course
+router.put('/updateCourse/:courseId', async (req, res) => {
+    res.send("Update Course not implemented yet!");
+});
+
+
+
 
 module.exports = router;
