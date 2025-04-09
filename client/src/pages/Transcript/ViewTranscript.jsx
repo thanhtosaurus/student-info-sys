@@ -5,9 +5,11 @@ import { supabase } from '../../supabaseClient'; // Import Supabase client
 const ViewTranscript = () => {
   const [userId, setUserId] = useState('');
   const [transcriptData, setTranscriptData] = useState([]);
+  const [studentInfo, setStudentInfo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchedId, setSearchedId] = useState('');
+  const [showTable, setShowTable] = useState(false);
 
   const handleChange = (e) => {
     setUserId(e.target.value);
@@ -17,6 +19,21 @@ const ViewTranscript = () => {
     try {
       setLoading(true);
       setError('');
+      
+      // First, fetch student information
+      const { data: studentData, error: studentError } = await supabase
+        .from('users')
+        .select('id, first_name, last_name, email')
+        .eq('id', userId)
+        .single();
+        
+      if (studentError) {
+        setError('Student not found. Please check the ID and try again.');
+        setLoading(false);
+        return;
+      }
+      
+      setStudentInfo(studentData);
       
       // Execute a raw SQL query with the provided user ID
       const { data, error } = await supabase.from('enrollments')
@@ -90,14 +107,17 @@ const ViewTranscript = () => {
         
         setTranscriptData(fullTranscriptData);
         setSearchedId(userId);
+        setShowTable(true);
       } else {
         setTranscriptData([]);
         setError('No transcript data found for this student ID.');
+        setShowTable(false);
       }
     } catch (error) {
       console.error('Error fetching transcript:', error);
       setError('Failed to fetch transcript. Please try again.');
       setTranscriptData([]);
+      setShowTable(false);
     } finally {
       setLoading(false);
     }
@@ -106,6 +126,10 @@ const ViewTranscript = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     fetchTranscript();
+  };
+
+  const closeTable = () => {
+    setShowTable(false);
   };
 
   return (
@@ -125,7 +149,7 @@ const ViewTranscript = () => {
               name="userId"
               value={userId}
               onChange={handleChange}
-              placeholder="Enter number"
+              placeholder="Enter student ID"
             />
           </div>
           <button type="submit" className="search-button" disabled={loading}>
@@ -134,36 +158,49 @@ const ViewTranscript = () => {
         </form>
       </div>
 
-      {/* Transcript Table */}
       {loading && <div className="loading">Loading transcript...</div>}
       {error && <div className="error">{error}</div>}
-      {transcriptData.length > 0 && (
-        <div className="transcript-table">
-          <h3>Course History for Student ID: {searchedId}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Course</th>
-                <th>Term</th>
-                <th>Year</th>
-                <th>Grade</th>
-                <th>Units</th>
-                <th>Professor</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transcriptData.map((course, index) => (
-                <tr key={index}>
-                  <td>{course.course_code}</td>
-                  <td>{course.term}</td>
-                  <td>{course.year}</td>
-                  <td>{course.grade}</td>
-                  <td>{course.units}</td>
-                  <td>{course.first_name}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      
+      {/* Popup Transcript Table */}
+      {showTable && transcriptData.length > 0 && studentInfo && (
+        <div className="transcript-popup">
+          <div className="popup-content">
+            <div className="popup-header">
+              <h2>Student Transcript</h2>
+              <button className="close-button" onClick={closeTable}>×</button>
+            </div>
+            <div className="student-info">
+              <p className="black-text"><strong>ID:</strong> {searchedId}</p>
+              <p className="black-text"><strong>Name:</strong> {studentInfo.first_name} {studentInfo.last_name}</p>
+              <p className="black-text"><strong>Email:</strong> {studentInfo.email}</p>
+            </div>
+            <div className="transcript-table-container">
+              <table className="solid-table">
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Term</th>
+                    <th>Year</th>
+                    <th>Grade</th>
+                    <th>Units</th>
+                    <th>Professor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {transcriptData.map((course, index) => (
+                    <tr key={index}>
+                      <td>{course.course_code}</td>
+                      <td>{course.term}</td>
+                      <td>{course.year}</td>
+                      <td>{course.grade}</td>
+                      <td>{course.units}</td>
+                      <td>{course.first_name}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
     </div>
