@@ -68,10 +68,19 @@
   color: #8EADD5;
 }
 
-.error-message {
+.error {
   color: #FF6B6B;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.loading {
+  color: #FFFFFF;
+  text-align: center;
+  margin-top: 1rem;
 }
 
 .search-button {
@@ -94,6 +103,11 @@
 
 .search-button:active {
   background-color: #E48A3B;
+}
+
+.search-button:disabled {
+  background-color: #B3B3B3;
+  cursor: not-allowed;
 }
 
 /* Popup Styles */
@@ -157,26 +171,24 @@
   padding: 15px 20px;
   border-bottom: 1px solid #eee;
   background-color: #f9f9f9;
-}
-
-.student-info h3 {
-  color: #FFFFFF;
-  margin-top: 0;
-  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .student-info p {
   color: #333;
   margin: 0.5rem 0;
   font-size: 1rem;
-}
-
-.black-text {
-  color: #000 !important;
+  display: flex;
 }
 
 .student-info strong {
   font-weight: 600;
+  min-width: 60px;
+  display: inline-block;
+}
+
+.black-text {
+  color: #000 !important;
 }
 
 .transcript-table-container {
@@ -221,6 +233,7 @@
   }
 
   .popup-content {
-    padding: 1.5rem;
+    width: 95%;
+    max-height: 90vh;
   }
 } 

@@ -35,7 +35,7 @@ const ViewTranscript = () => {
       
       setStudentInfo(studentData);
       
-      // Execute a raw SQL query with the provided user ID
+      // Get enrollments for the student
       const { data, error } = await supabase.from('enrollments')
         .select(`
           section_id,
@@ -47,10 +47,8 @@ const ViewTranscript = () => {
 
       // If we have enrollment data, get the related information
       if (data && data.length > 0) {
-        // Create an array to store complete transcript data
         const fullTranscriptData = [];
         
-        // For each enrollment, get the related section data
         for (const enrollment of data) {
           const { data: sectionData, error: sectionError } = await supabase
             .from('sections')
@@ -64,7 +62,6 @@ const ViewTranscript = () => {
             
           if (sectionError) continue;
           
-          // Get course data
           const { data: courseData, error: courseError } = await supabase
             .from('courses')
             .select('course_code, units')
@@ -73,7 +70,6 @@ const ViewTranscript = () => {
             
           if (courseError) continue;
           
-          // Get semester data
           const { data: semesterData, error: semesterError } = await supabase
             .from('semesters')
             .select('term, year')
@@ -82,7 +78,6 @@ const ViewTranscript = () => {
             
           if (semesterError) continue;
           
-          // Get professor and user data
           const { data: professorData, error: professorError } = await supabase
             .from('professors')
             .select(`
@@ -94,7 +89,6 @@ const ViewTranscript = () => {
             
           if (professorError) continue;
           
-          // Combine all data into one transcript entry
           fullTranscriptData.push({
             course_code: courseData.course_code,
             units: courseData.units,
