@@ -10,6 +10,8 @@ import ViewUsers from './pages/UserManagement/ViewUsers';
 import CatalogManagement from './pages/Admin/CatalogManagement';
 import YearSelection from './pages/Admin/YearSelection';
 import CatalogLanding from './pages/Admin/CatalogLanding';
+import ProfessorPortal from './pages/Professor/ProfessorPortal';
+
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
 
@@ -104,7 +106,13 @@ function App() {
             path="/test-edit-transcript"
             element={<EditTranscript onClose={() => console.log('Closed')} />}
           />
-         
+
+          {/* Professor Portal route */}
+          <Route
+            path="/professor"
+            element={<ProfessorPortal onLogout={handleLogout} />}
+          />
+
           {/* Redirect any unknown routes to home */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
