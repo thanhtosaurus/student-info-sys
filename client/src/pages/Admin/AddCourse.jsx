@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 // Frontend only: form component to add a new course
 // This uses local state and is not yet connected to backend
-export default function AddCourse({ courses, setCourses, onBackClick, selectedYear }) {
+export default function AddCourse({ courses = [], setCourses, onBackClick, selectedYear }) {
   // Form state for new course input
   const [form, setForm] = useState({
     course_code: '',
@@ -40,7 +40,7 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add form data to the shared courses state (frontend only)
-    setCourses([...courses, { ...form, year: selectedYear }]); // Ensure year is set to selectedYear
+    setCourses([...courses, { ...form, year: selectedYear, term: form.term }]); // Ensure year and term are set correctly
     setForm({
       course_code: '',
       course_title: '',
@@ -53,11 +53,11 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif', padding: '40px 20px' }}>
     <h2>Catalog Year: {selectedYear}</h2>  
       <h3>Add New Course</h3>
-      <form onSubmit={handleSubmit}>
-        <div style={{ textAlign: 'left' }}>
+      <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
+        <div>
           <label>Course Code:</label>
           <input
             type="text"
@@ -66,7 +66,7 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
             value={form.course_code}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
 
           <label>Course Name:</label>
@@ -77,7 +77,7 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
             value={form.course_title}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
 
           <label>Description:</label>
@@ -87,7 +87,7 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
             value={form.description}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px', marginBottom: '10px', height: '100px' }}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', height: '100px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
 
           <label>Units:</label>
@@ -100,31 +100,18 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
             required
             min="1"
             max="6"
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
 
           <label>Term:</label>
-          <select
+          <input
+            type="text"
             name="term"
+            placeholder="Enter term (e.g., Spring, Summer, Fall)"
             value={form.term}
             onChange={handleChange}
             required
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
-          >
-            <option value="">Select term</option>
-            <option value="Spring">Spring</option>
-            <option value="Summer">Summer</option>
-            <option value="Fall">Fall</option>
-          </select>
-
-          <label>Year:</label>
-          <input
-            type="number"
-            name="year"
-            value={selectedYear}
-            readOnly
-            disabled
-            style={{ width: '100%', padding: '8px', marginBottom: '10px' }}
+            style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
           />
 
           <label>Prerequisites:</label>
@@ -134,9 +121,9 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
               placeholder="Enter prerequisite course code"
               value={tempPrereq}
               onChange={(e) => setTempPrereq(e.target.value)}
-              style={{ flexGrow: 1, padding: '8px' }}
+              style={{ flexGrow: 1, padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
             />
-            <button type="button" onClick={handleAddPrerequisite} style={{ padding: '8px 12px' }}>
+            <button type="button" onClick={handleAddPrerequisite} style={{ padding: '8px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
               Add
             </button>
           </div>
@@ -153,50 +140,15 @@ export default function AddCourse({ courses, setCourses, onBackClick, selectedYe
           )}
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <button type="button" onClick={onBackClick} style={{ padding: '10px 20px', backgroundColor: 'gray', color: 'white' }}>
+            <button type="button" onClick={onBackClick} style={{ padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
               Back
             </button>
-            <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white' }}>
+            <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
               Add Course
             </button>
           </div>
         </div>
       </form>
-
-      {/* Course List Table*/}
-      <div style={{ marginTop: '30px', textAlign: 'left' }}>
-        <h3>Course List</h3>
-        {courses.length === 0 ? (
-          <p>No courses available.</p>
-        ) : (
-          <table border="1" cellPadding="8" style={{ width: '100%', borderCollapse: 'collapse', color: '#000' }}>
-            <thead>
-              <tr>
-                <th>Code</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Units</th>
-                <th>Prerequisites</th>
-                <th>Term</th>
-                <th>Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course, index) => (
-                <tr key={index}>
-                  <td>{course.course_code}</td>
-                  <td>{course.course_title}</td>
-                  <td>{course.description}</td>
-                  <td>{course.units}</td>
-                  <td>{course.prerequisites.join(', ')}</td>
-                  <td>{course.term}</td>
-                  <td>{course.year}</td>  
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
     </div>
   );
 }
