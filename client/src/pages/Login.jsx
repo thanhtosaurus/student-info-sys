@@ -1,13 +1,16 @@
 // src/pages/Login.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Login.css';
 import { API_URL } from '../config';
 
 const Login = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [testingMode, setTestingMode] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
-    password: ''
+    password: '',
+    role: 'admin' // Default role
   });
   
   const [errors, setErrors] = useState({});
@@ -65,7 +68,7 @@ const Login = ({ onLogin }) => {
             id: '1',
             email: formData.username,
             name: 'Test User',
-            role: 'admin'
+            role: formData.role
           }
         };
         
@@ -74,7 +77,17 @@ const Login = ({ onLogin }) => {
         localStorage.setItem('user', JSON.stringify(testData.user));
         
         // Call the onLogin function to update authentication state
-        onLogin();
+        onLogin(formData.role);
+        
+        // Navigate to the appropriate portal based on role
+        if (formData.role === 'professor') {
+          navigate('/professor');
+        } else if (formData.role === 'admin') {
+          navigate('/portal');
+        } else if (formData.role === 'student') {
+          navigate('/student');
+        }
+        
         setIsLoading(false);
         return;
       }
@@ -86,7 +99,8 @@ const Login = ({ onLogin }) => {
         },
         body: JSON.stringify({
           email: formData.username,
-          password: formData.password
+          password: formData.password,
+          role: formData.role
         }),
       });
       
@@ -100,8 +114,17 @@ const Login = ({ onLogin }) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
-      // Call the onLogin function to update authentication state in the parent component
-      onLogin();
+      // Call the onLogin function to update authentication state
+      onLogin(formData.role);
+      
+      // Navigate to the appropriate portal based on role
+      if (formData.role === 'professor') {
+        navigate('/professor');
+      } else if (formData.role === 'admin') {
+        navigate('/portal');
+      } else if (formData.role === 'student') {
+        navigate('/student');
+      }
     } catch (error) {
       setErrors({
         ...errors,
@@ -131,6 +154,21 @@ const Login = ({ onLogin }) => {
         </div>
         
         <form className="login-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="role">Select Role</label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="role-select"
+            >
+              <option value="admin">Administrator</option>
+              <option value="professor">Professor</option>
+              <option value="student">Student</option>
+            </select>
+          </div>
+
           <div className="form-group">
             <label htmlFor="username">Username</label>
             <input
