@@ -5,6 +5,16 @@ import { useNavigate } from 'react-router-dom';
 function ProfessorPortal({ onLogout }) {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    // Clear localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    // Call the onLogout function from props
+    onLogout();
+    // Navigate back to login page
+    navigate('/');
+  };
+
   const navigateTo = (path) => {
     navigate(path);
   };
@@ -15,7 +25,7 @@ function ProfessorPortal({ onLogout }) {
         <h1>Professor Portal</h1>
         <p>Welcome to the Student Information System Professor Dashboard</p>
         <button 
-          onClick={onLogout}
+          onClick={handleLogout}
           className="logout-button"
           style={{
             backgroundColor: '#FF6B6B',
