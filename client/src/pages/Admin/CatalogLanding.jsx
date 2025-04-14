@@ -4,6 +4,7 @@ import AddCourse from './AddCourse';
 import EditCourseInfo from './EditCourseInfo';
 import DeleteCourse from './DeleteSection';
 import ViewCourseCatalog from './ViewCourseCatalog';
+import CreateCourseSection from './CreateCourseSection';
 
 const CatalogLanding = () => {
   const { year } = useParams();
@@ -20,12 +21,15 @@ const CatalogLanding = () => {
         return <DeleteCourse onBackClick={() => setSelectedTask('')} />;
       case 'view':
         return <ViewCourseCatalog />;
+      case 'create-section':
+        return <CreateCourseSection onBackClick={() => setSelectedTask('')} />;
       default:
         return (
           <div style={styles.container}>
             <h2 style={styles.subheading}>Catalog Management - {year}</h2>
             <div style={styles.buttonGroup}>
               <button style={styles.button} onClick={() => setSelectedTask('add')}>Add New Course</button>
+              <button style={styles.button} onClick={() => setSelectedTask('create-section')}>Create Course Section</button>
               <button style={styles.button} onClick={() => setSelectedTask('edit')}>Edit Course Info</button>
               <button style={styles.button} onClick={() => setSelectedTask('delete')}>Delete Sections</button>
               <button style={styles.button} onClick={() => setSelectedTask('view')}>View Course Catalog</button>
