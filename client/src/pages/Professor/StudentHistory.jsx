@@ -1,13 +1,14 @@
 import React from 'react';
 import '../../styles/StudentHistory.css';
 import ViewPastGrades from './components/ViewPastGrades';
+import GradeEntry from './components/GradeEntry';
 
 const StudentHistory = () => {
   return (
-    
-    <ViewPastGrades />
-    //Create another component and dump it below here Loc
-
+    <div>
+      <ViewPastGrades />
+      <GradeEntry />
+    </div>
   );
 };
 
