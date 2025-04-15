@@ -655,6 +655,98 @@ router.get('/catalogs/:catalog_year', async (req, res) => {
     res.status(200).json(data);
 });
 
+// Add new course section to existing catalog [SIS-46]
+router.post('/addCourseSection', async (req, res) => {
+    try {
+        // Extract course section details from request body
+        const {
+          courseId,
+          professorId,
+          semesterId,
+          sectionNumber,
+          schedule,
+          location,
+          maxEnrollment
+        } = req.body;
+    
+        // Validate required fields
+        if (!courseId || !semesterId || !sectionNumber) {
+          return res.status(400).json({
+            success: false,
+            message: 'Missing required fields: courseId, semesterId, and sectionNumber are required'
+          });
+        }
+
+        // Insert details to sections table
+        const { data: inserted_data, error: insert_error } = await supabase
+            .from('sections')
+            .insert([
+                {
+                    course_id: courseId,
+                    professor_id: professorId,
+                    semester_id: semesterId,
+                    schedule: schedule,
+                    location: location,
+                    capacity: maxEnrollment
+                }
+            ])
+            .select()
+            .single();
+        
+        if (insert_error) {
+            console.log(insert_error)
+            return res.status(500).json({ error: 'Failed to add course section to catalog', error_message: insert_error });
+        }
+
+    } catch (err) {
+        console.error('Error adding course section to catalog:', err.message);
+        res.status(500).json({ error: 'Error adding course section to catalog' });
+    }
+});
+
+// Remove course section from semester table
+router.put('/removeCourseSection/', async (req, res) => {
+    try {
+        // Extract course section details from request body
+        const {
+            sectionId,
+            semesterId
+        } = req.body;
+
+        // Validate required fields
+        if (!sectionId || !semesterId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields: sectionId and semesterId are required'
+            });
+        }
+
+        // Remove course section
+        const removeSectionQuery = `
+            DELETE FROM sections 
+            WHERE id = ? AND semester_id = ?
+        `;
+        
+        const [result] = await db.query(removeSectionQuery, [sectionId, semesterId]);
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'Section not found or already removed'
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            message: 'Course section removed successfully'
+        });
+
+    } catch (err) {
+        console.error('Error removing course section from catalog: ', err.message);
+        res.status(500).json({ error: 'Error removing course section from catalog' });
+    }
+});
+
 // Get all courses
 router.get('/courses', async (req, res) => {
     try {
@@ -674,5 +766,20 @@ router.get('/courses', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// Add new course
+router.post('/createCourse', async (req, res) => {
+    res.send("Create Course not implemented yet!");
+    // return json
+    
+});
+
+// Update course
+router.put('/updateCourse/:courseId', async (req, res) => {
+    res.send("Update Course not implemented yet!");
+});
+
+
+
 
 module.exports = router;
