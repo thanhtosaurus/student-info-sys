@@ -62,7 +62,7 @@ function ProfessorPortal({ onLogout }) {
           <p>View and manage student academic history</p>
           <button 
             className="card-button"
-            onClick={() => navigateTo('/professor/enter-grades')}
+            onClick={() => navigateTo('/professor/student-history')}
           >
             Access Student History
           </button>
