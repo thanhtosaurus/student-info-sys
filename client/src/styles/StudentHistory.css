@@ -1,0 +1,105 @@
+.student-history-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #0F2A4A;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.student-history-box {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #1B3B66;
+  border-radius: 8px;
+  padding: 2.5rem;
+  color: white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.student-history-title {
+  color: #FFFFFF;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: normal;
+}
+
+.student-history-subtitle {
+  color: #E6E6E6;
+  font-size: 1.1rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.student-history-form {
+  width: 100%;
+}
+
+.student-history-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #E6E6E6;
+  margin-bottom: 0.5rem;
+}
+
+.student-history-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  background-color: #0F2A4A;
+  border: 1px solid #3D5A80;
+  border-radius: 6px;
+  color: #FFFFFF;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.student-history-input:hover {
+  border-color: #3D5A80;
+}
+
+.student-history-input:focus {
+  outline: none;
+  border-color: #F49E4C;
+  box-shadow: 0 0 0 2px rgba(244, 158, 76, 0.2);
+}
+
+.student-history-input::placeholder {
+  color: #8EADD5;
+}
+
+.student-history-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  background-color: #F49E4C;
+  border: none;
+  border-radius: 6px;
+  color: #0F2A4A;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.student-history-button:hover {
+  background-color: #F7B267;
+}
+
+.student-history-button:active {
+  background-color: #E48A3B;
+}
+
+@media (max-width: 768px) {
+  .student-history-box {
+    padding: 1.5rem;
+  }
+} 
