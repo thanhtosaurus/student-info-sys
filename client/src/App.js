@@ -11,6 +11,7 @@ import CatalogManagement from './pages/Admin/CatalogManagement';
 import YearSelection from './pages/Admin/YearSelection';
 import CatalogLanding from './pages/Admin/CatalogLanding';
 import ProfessorPortal from './pages/Professor/ProfessorPortal';
+import StudentHistory from './pages/Professor/StudentHistory';
 
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
@@ -111,6 +112,16 @@ function App() {
           <Route
             path="/professor"
             element={<ProfessorPortal onLogout={handleLogout} />}
+          />
+
+          {/* Student History route */}
+          <Route
+            path="/professor/student-history"
+            element={
+              isAuthenticated ? 
+                <StudentHistory /> : 
+                <Navigate to="/" />
+            }
           />
 
           {/* Redirect any unknown routes to home */}

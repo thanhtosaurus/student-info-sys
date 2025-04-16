@@ -1,29 +1,23 @@
 import React from 'react';
 import '../../styles/StudentHistory.css';
+import ViewPastGrades from './components/ViewPastGrades';
+import GradeEntry from './components/GradeEntry';
 
 const StudentHistory = () => {
   return (
     <div className="student-history-container">
       <div className="student-history-box">
         <h1 className="student-history-title">
-           Student Academic History Management
+          View Past Grades
         </h1>
-        <p className="student-history-subtitle">
-          Enter the student ID to manage their academic history
-        </p>
+        <ViewPastGrades />
+      </div>
 
-        <div className="student-history-form">
-          <label className="student-history-label">
-          </label>
-          <input
-            type="text"
-            className="student-history-input"
-            placeholder="Enter student ID"
-          />
-          <button className="student-history-button">
-            Search 
-          </button>
-        </div>
+      <div className="student-history-box" style={{ marginTop: '2rem' }}>
+        <h1 className="student-history-title">
+          Grade Entry System
+        </h1>
+        <GradeEntry />
       </div>
     </div>
   );
