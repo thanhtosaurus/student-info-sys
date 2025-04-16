@@ -8,6 +8,7 @@ const GradeEntry = () => {
       <div className="grade-entry-content">
         <h2>Grade Entry Form</h2>
         <form className="grade-entry-form">
+          {/* Course Selection */}
           <div className="form-group full-width">
             <label htmlFor="course">Course:</label>
             <select
@@ -23,53 +24,60 @@ const GradeEntry = () => {
             </select>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="studentId">Student ID:</label>
-            <input
-              type="text"
-              id="studentId"
-              name="studentId"
-              required
-            />
+          {/* Student Information */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="studentId">Student ID:</label>
+              <input
+                type="text"
+                id="studentId"
+                name="studentId"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="studentName">Student Name:</label>
+              <input
+                type="text"
+                id="studentName"
+                name="studentName"
+                required
+              />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="studentName">Student Name:</label>
-            <input
-              type="text"
-              id="studentName"
-              name="studentName"
-              required
-            />
+          {/* Term and Year */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="term">Term:</label>
+              <select
+                id="term"
+                name="term"
+                required
+              >
+                <option value="">Select Term</option>
+                <option value="Fall">Fall</option>
+                <option value="Spring">Spring</option>
+                <option value="Summer">Summer</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="year">Year:</label>
+              <input
+                type="number"
+                id="year"
+                name="year"
+                min="2020"
+                max="2030"
+                required
+              />
+            </div>
           </div>
 
+          {/* Grade */}
           <div className="form-group">
-            <label htmlFor="year">Year:</label>
-            <input
-              type="number"
-              id="year"
-              name="year"
-              min="2000"
-              max="2025"
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="term">Term:</label>
-            <select
-              id="term"
-              name="term"
-              required
-            >
-              <option value="">Select Term</option>
-              <option value="Fall">Fall</option>
-              <option value="Spring">Spring</option>
-              <option value="Summer">Summer</option>
-            </select>
-          </div>
-
-          <div className="form-group full-width">
             <label htmlFor="grade">Grade:</label>
             <select
               id="grade"
@@ -91,9 +99,7 @@ const GradeEntry = () => {
             </select>
           </div>
 
-          <button type="submit" className="submit-button">
-            Submit Grade
-          </button>
+          <button type="submit" className="submit-button">Submit Grade</button>
         </form>
       </div>
     </div>
