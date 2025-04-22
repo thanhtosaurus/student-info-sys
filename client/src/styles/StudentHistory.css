@@ -3,18 +3,15 @@
   min-height: 100vh;
   background-color: #0F2A4A;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
   flex-direction: column;
+  align-items: center;
+  padding-top: 4rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .student-history-box {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,7 +25,7 @@
 .student-history-title {
   color: #FFFFFF;
   font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2rem;
   text-align: center;
   font-weight: normal;
 }
@@ -98,6 +95,49 @@
 
 .student-history-button:active {
   background-color: #E48A3B;
+}
+
+.button-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.action-button {
+  padding: 1.5rem 3rem;
+  font-size: 1.3rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  min-width: 250px;
+}
+
+.view-grades-btn {
+  background-color: #F49E4C;
+  color: #0F2A4A;
+}
+
+.view-grades-btn:hover {
+  background-color: #F7B267;
+  transform: translateY(-2px);
+}
+
+.enter-grade-btn {
+  background-color: #F49E4C;
+  color: #0F2A4A;
+}
+
+.enter-grade-btn:hover {
+  background-color: #F7B267;
+  transform: translateY(-2px);
+}
+
+.action-button:active {
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
