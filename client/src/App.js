@@ -12,6 +12,8 @@ import YearSelection from './pages/Admin/YearSelection';
 import CatalogLanding from './pages/Admin/CatalogLanding';
 import ProfessorPortal from './pages/Professor/ProfessorPortal';
 import StudentHistory from './pages/Professor/StudentHistory';
+import ViewPastGrades from './pages/Professor/components/ViewPastGrades';
+import GradeEntry from './pages/Professor/components/GradeEntry';
 
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
@@ -120,6 +122,26 @@ function App() {
             element={
               isAuthenticated ? 
                 <StudentHistory /> : 
+                <Navigate to="/" />
+            }
+          />
+
+          {/* View Past Grades route */}
+          <Route
+            path="/professor/student-history/view-past-grades"
+            element={
+              isAuthenticated ? 
+                <ViewPastGrades /> : 
+                <Navigate to="/" />
+            }
+          />
+
+          {/* Grade Entry route */}
+          <Route
+            path="/professor/student-history/grade-entry"
+            element={
+              isAuthenticated ? 
+                <GradeEntry /> : 
                 <Navigate to="/" />
             }
           />

@@ -11,8 +11,9 @@ const ViewPastGrades = () => {
   const [searchedId, setSearchedId] = useState('');
   const [showTable, setShowTable] = useState(false);
 
-  const handleChange = (e) => {
-    setStudentId(e.target.value);
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchTranscript();
   };
 
   const fetchTranscript = async () => {
@@ -117,33 +118,27 @@ const ViewPastGrades = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    fetchTranscript();
-  };
-
   const closeTable = () => {
     setShowTable(false);
   };
 
   return (
-    <div className="view-grades-section">
-      <form className="student-history-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className="student-history-input"
-          placeholder="Enter student ID"
-          value={studentId}
-          onChange={handleChange}
-        />
-        <button 
-          className="student-history-button"
-          type="submit"
-          disabled={loading}
-        >
-          {loading ? 'Searching...' : 'Search'}
-        </button>
-      </form>
+    <div className="student-history-container">
+      <div className="student-history-box">
+        <h1 className="student-history-title">View Past Grades</h1>
+        <form className="student-history-form" onSubmit={handleSearch}>
+          <input
+            type="text"
+            className="student-history-input"
+            placeholder="Enter student ID"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+          />
+          <button type="submit" className="student-history-button">
+            Search
+          </button>
+        </form>
+      </div>
 
       {loading && <div className="loading">Loading transcript...</div>}
       {error && <div className="error">{error}</div>}

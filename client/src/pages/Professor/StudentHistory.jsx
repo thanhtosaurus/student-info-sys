@@ -1,23 +1,28 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/StudentHistory.css';
-import ViewPastGrades from './components/ViewPastGrades';
-import GradeEntry from './components/GradeEntry';
 
 const StudentHistory = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="student-history-container">
       <div className="student-history-box">
-        <h1 className="student-history-title">
-          View Past Grades
-        </h1>
-        <ViewPastGrades />
-      </div>
-
-      <div className="student-history-box" style={{ marginTop: '2rem' }}>
-        <h1 className="student-history-title">
-          Grade Entry System
-        </h1>
-        <GradeEntry />
+        <h1 className="student-history-title">Student History Management</h1>
+        <div className="button-container">
+          <button 
+            className="action-button view-grades-btn"
+            onClick={() => navigate('/professor/student-history/view-past-grades')}
+          >
+            View Past Grades
+          </button>
+          <button 
+            className="action-button enter-grade-btn"
+            onClick={() => navigate('/professor/student-history/grade-entry')}
+          >
+            Enter Grade
+          </button>
+        </div>
       </div>
     </div>
   );
