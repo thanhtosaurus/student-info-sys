@@ -81,7 +81,7 @@ const ViewUsers = () => {
             <tr>
               {users.length > 0 && Object.keys(users[0]).map((header) => (
                 <th key={header} className="px-4 py-2 border-b">
-                  {header}
+                  {(header === 'id' || header === 'password') ? '' : header}
                 </th>
               ))}
             </tr>
@@ -92,16 +92,12 @@ const ViewUsers = () => {
                 {Object.entries(user).map(([key, value], i) => (
                   <td key={i} className="px-4 py-2 border-b">
                      {key === 'id' ? (
-                        <a
-                          href="#" 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleViewProfile(value);
-                          }}
-                          className="text-blue-600 hover:underline cursor-pointer"
-                        >
-                          {value?.toString() || ''}
-                        </a>
+                         <button
+                         onClick={() => handleViewProfile(value)}
+                         className="text-blue-600 hover:underline cursor-pointer bg-transparent border-none p-0 m-0 text-left"
+                       >
+                         View User Profile
+                       </button>
                       ):(
                         value?.toString() || ''
                       )}
