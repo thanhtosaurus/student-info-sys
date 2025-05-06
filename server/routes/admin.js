@@ -311,7 +311,8 @@ const supabase = require('../db');
  *     responses:
  *       200:
  *         description: Username availability status
-=======
+ */
+
 /**
  * @swagger
  * /catalogs/{catalog_year}:
@@ -454,7 +455,7 @@ router.get('/checkUsername/:username', async (req, res) => {
 
 router.get('/users/:id', async (req, res) => {
     const { id } = req.params;
-    const { data, error } = await supabase.from('users').select('*').eq('user_id', id);
+    const { data, error } = await supabase.from('users').select('*').eq('id', id);
     if (error) return res.status(500).json({ error: error.message });
     res.status(200).json(data);
 });
