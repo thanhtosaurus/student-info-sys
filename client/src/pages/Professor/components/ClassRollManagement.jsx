@@ -10,6 +10,12 @@ const ClassRollManagement = () => {
       <div className="class-roll-header">
         <h1>Class Roll Management</h1>
         <p>Manage your class enrollments and student records</p>
+        <button 
+          className="back-button"
+          onClick={() => navigate('/professor')}
+        >
+          ← Back to Professor Portal
+        </button>
       </div>
 
       <div className="class-roll-actions">
