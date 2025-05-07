@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ClassRollManagement.css';
 
 const ViewClassRoll = () => {
   const navigate = useNavigate();
-  const [selectedCourse, setSelectedCourse] = useState('');
-  const [selectedSection, setSelectedSection] = useState('');
+  const [formData, setFormData] = useState({
+    courseCode: '',
+    section: ''
+  });
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  // Mock data for demonstration
-  const mockStudents = [
-    { id: '1', name: 'John Doe', studentId: '12345', email: 'john@csu.fullerton.edu' },
-    { id: '2', name: 'Jane Smith', studentId: '12346', email: 'jane@csu.fullerton.edu' },
-    { id: '3', name: 'Bob Johnson', studentId: '12347', email: 'bob@csu.fullerton.edu' },
-  ];
-
-  const handleCourseChange = (e) => {
-    setSelectedCourse(e.target.value);
-    setSelectedSection('');
-    setStudents([]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleSectionChange = (e) => {
-    setSelectedSection(e.target.value);
-    // TODO: Implement API call to fetch students for the selected course and section
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      setStudents(mockStudents);
-      setLoading(false);
-    }, 1000);
+    setError('');
+    // TODO: Implement API call to fetch students for the selected course and section
+    console.log('Fetching students for:', formData);
+    setLoading(false);
   };
 
   return (
@@ -44,79 +41,74 @@ const ViewClassRoll = () => {
         </button>
       </div>
 
-      <div className="view-class-roll-container">
-        <div className="filters">
+      <div className="form-container">
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="course">Course</label>
-            <select
-              id="course"
-              value={selectedCourse}
-              onChange={handleCourseChange}
+            <label htmlFor="courseCode">Course Code</label>
+            <input
+              type="text"
+              id="courseCode"
+              name="courseCode"
+              value={formData.courseCode}
+              onChange={handleChange}
+              placeholder="Enter Course Code (e.g., CPSC 541)"
               required
-            >
-              <option value="">Select Course</option>
-              <option value="CPSC 541">CPSC 541 - System and Software Standards</option>
-              <option value="CPSC 544">CPSC 544 - Advanced Software Process</option>
-              <option value="CPSC 545">CPSC 545 - Software Design & Architecture</option>
-              <option value="CPSC 546">CPSC 546 - Modern Software Management</option>
-            </select>
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="section">Section</label>
-            <select
+            <input
+              type="text"
               id="section"
-              value={selectedSection}
-              onChange={handleSectionChange}
+              name="section"
+              value={formData.section}
+              onChange={handleChange}
+              placeholder="Enter Section Number"
               required
-              disabled={!selectedCourse}
-            >
-              <option value="">Select Section</option>
-              <option value="01">Section 01</option>
-              <option value="02">Section 02</option>
-              <option value="03">Section 03</option>
-            </select>
+            />
           </div>
-        </div>
 
-        {loading ? (
-          <div className="loading">Loading students...</div>
-        ) : (
-          <div className="students-table">
-            {students.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Student ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students.map(student => (
-                    <tr key={student.id}>
-                      <td>{student.studentId}</td>
-                      <td>{student.name}</td>
-                      <td>{student.email}</td>
-                      <td>
-                        <button 
-                          className="action-button"
-                          onClick={() => navigate(`/professor/student-history?studentId=${student.studentId}`)}
-                        >
-                          View History
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              selectedSection && <div className="no-students">No students found in this section.</div>
-            )}
-          </div>
-        )}
+          <button type="submit" className="submit-button">
+            View Class Roll
+          </button>
+        </form>
       </div>
+
+      {loading && <div className="loading">Loading students...</div>}
+      {error && <div className="error">{error}</div>}
+      
+      {students.length > 0 && (
+        <div className="students-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {students.map(student => (
+                <tr key={student.id}>
+                  <td>{student.studentId}</td>
+                  <td>{student.name}</td>
+                  <td>{student.email}</td>
+                  <td>
+                    <button 
+                      className="action-button"
+                      onClick={() => navigate(`/professor/student-history?studentId=${student.studentId}`)}
+                    >
+                      View History
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
