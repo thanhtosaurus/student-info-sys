@@ -24,9 +24,21 @@ const ViewClassRoll = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    // TODO: Implement API call to fetch students for the selected course and section
-    console.log('Fetching students for:', formData);
-    setLoading(false);
+    try {
+      // TODO: Implement API call to fetch students for the selected course and section
+      console.log('Fetching students for:', formData);
+      // Mock data for now - replace with actual API call
+      const mockStudents = [
+        { id: 1, studentId: '12345', name: 'John Doe', email: 'john@example.com' },
+        { id: 2, studentId: '67890', name: 'Jane Smith', email: 'jane@example.com' }
+      ];
+      setStudents(mockStudents);
+    } catch (err) {
+      setError('Failed to fetch students. Please try again.');
+      setStudents([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
