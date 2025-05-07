@@ -50,9 +50,9 @@ function ProfessorPortal({ onLogout }) {
           <p>Manage class rolls and student attendance</p>
           <button 
             className="card-button"
-            onClick={() => navigateTo('/classroll-management')}
+            onClick={() => navigateTo('/professor/class-roll')}
           >
-            Access Classroll Management
+            Access Class Roll Management
           </button>
         </div>
 
