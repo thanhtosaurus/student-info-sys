@@ -23,6 +23,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "pg": "^8.14.1",
+    "student-info-sys": "file:..",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

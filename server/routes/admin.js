@@ -5,8 +5,8 @@ const supabase = require('../db');
 /**
  * @swagger
  * tags:
- *   name: Admin
- *   description: Admin operations
+ *   - name: Admin
+ *     description: Admin operations
  */
 
 /**
@@ -30,14 +30,12 @@ const supabase = require('../db');
  *                   id:
  *                     type: string
  *                     description: The user ID
- *                   # Add other expected user properties here, for example:
  *                   name:
  *                     type: string
  *                     description: The user's name
  *                   email:
  *                     type: string
  *                     description: The user's email
- *                   # ...other properties
  *       500:
  *         description: Server error
  *         content:
@@ -294,8 +292,6 @@ const supabase = require('../db');
  *                   example: "Professor update error"
  */
 
-
-
 /**
  * @swagger
  * /api/admin/checkUsername/{username}:
@@ -359,78 +355,11 @@ const supabase = require('../db');
  *                   description: Error message
  */
 
-/**
- * @swagger
- * /createCatalog:
- *   post:
- *     summary: Create a new catalog
- *     description: Creates a new catalog entry with the specified catalog year
- *     tags:
- *       - Catalogs
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - catalog_year
- *             properties:
- *               catalog_year:
- *                 type: string
- *                 description: The year of the catalog (e.g., "2023")
- *                 example: "2023"
- *     responses:
- *       201:
- *         description: Catalog created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Catalog created successfully
- *                 catalog:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       format: uuid
- *                       example: 123e4567-e89b-12d3-a456-426614174000
- *                     catalog_year:
- *                       type: string
- *                       example: "2023"
- *       400:
- *         description: Bad request - validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Catalog year is required
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   example: Failed to create catalog
-
- */
-
-
 router.get('/users', async (req, res) => {
     const { data, error } = await supabase.from('users').select('*');
     if (error) return res.status(500).json({ error: error.message });
     res.status(200).json(data);
 });
-
 
 router.get('/checkUsername/:username', async (req, res) => {
     try {
@@ -451,7 +380,6 @@ router.get('/checkUsername/:username', async (req, res) => {
         res.status(500).json({ error: 'Failed to check username' });
     }
 });
-
 
 router.get('/users/:id', async (req, res) => {
     const { id } = req.params;
@@ -777,10 +705,118 @@ router.post('/createCourse', async (req, res) => {
 
 // Update course
 router.put('/updateCourse/:courseId', async (req, res) => {
-    res.send("Update Course not implemented yet!");
+    try {
+        const { courseId } = req.params;
+        const { description, status, units, course_title, course_code } = req.body;
+
+        // Validate required fields
+        if (!courseId) {
+            return res.status(400).json({ error: 'Course ID is required' });
+        }
+
+        // Prepare update data
+        const updateData = {};
+        if (description !== undefined) updateData.description = description;
+        if (status !== undefined) updateData.status = status;
+        if (units !== undefined) updateData.units = units;
+        if (course_title !== undefined) updateData.course_title = course_title;
+        if (course_code !== undefined) updateData.course_code = course_code;
+
+        // Check if there's anything to update
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ error: 'No fields to update provided' });
+        }
+
+        // Update the course
+        const { data, error } = await supabase
+            .from('courses')
+            .update(updateData)
+            .eq('course_id', courseId)
+            .select();
+
+        if (error) {
+            console.error('Error updating course:', error);
+            return res.status(500).json({ error: 'Failed to update course' });
+        }
+
+        if (!data || data.length === 0) {
+            return res.status(404).json({ error: 'Course not found' });
+        }
+
+        res.json({
+            message: 'Course updated successfully',
+            course: data[0]
+        });
+    } catch (error) {
+        console.error('Error in updateCourse:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
+/**
+ * @swagger
+ * /deactivateUser/{id}:
+ *   put:
+ *     summary: Deactivate a user
+ *     description: Updates the user_status to 'inactive' for a specific user
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The user's unique identifier
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deactivated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User deactivated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     user_status:
+ *                       type: string
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/deactivateUser/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const { data, error } = await supabase
+      .from('users')
+      .update({ user_status: 'inactive' })
+      .eq('id', id)
+      .select()
+      .single();
 
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      throw error;
+    }
+
+    res.json({
+      message: 'User deactivated successfully',
+      data
+    });
+  } catch (error) {
+    console.error('Error deactivating user:', error);
+    res.status(500).json({ error: 'Failed to deactivate user' });
+  }
+});
 
 module.exports = router;
