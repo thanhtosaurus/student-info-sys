@@ -56,7 +56,7 @@ const CreateCourseSection = ({ onBackClick }) => {
       if (semesterError) throw semesterError;
 
       // Create the course section
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('sections')
         .insert([
           {
