@@ -24,17 +24,26 @@ const ViewClassRoll = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setStudents([]);
     try {
-      // TODO: Implement API call to fetch students for the selected course and section
-      console.log('Fetching students for:', formData);
-      // Mock data for now - replace with actual API call
-      const mockStudents = [
-        { id: 1, studentId: '12345', name: 'John Doe', email: 'john@example.com' },
-        { id: 2, studentId: '67890', name: 'Jane Smith', email: 'jane@example.com' }
-      ];
-      setStudents(mockStudents);
+      const response = await fetch(
+        `http://localhost:5001/api/professors/class-roll/${encodeURIComponent(formData.courseCode)}/${encodeURIComponent(formData.section)}`
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch students.');
+      }
+      const data = await response.json();
+      // Map the backend response to the table format
+      const mappedStudents = data.students.map((student, idx) => ({
+        id: idx,
+        studentId: student.student_id,
+        name: `${student.first_name} ${student.last_name}`,
+        email: student.email,
+      }));
+      setStudents(mappedStudents);
     } catch (err) {
-      setError('Failed to fetch students. Please try again.');
+      setError(err.message || 'Failed to fetch students. Please try again.');
       setStudents([]);
     } finally {
       setLoading(false);
