@@ -1,61 +1,85 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../../supabaseClient';
 
 // Frontend only: form component to add a new course
 // This uses local state and is not yet connected to backend
-export default function AddCourse({ courses = [], setCourses, onBackClick, selectedYear }) {
-  // Form state for new course input
+export default function AddCourse({ onBackClick, selectedYear }) {
   const [form, setForm] = useState({
     course_code: '',
     course_title: '',
     description: '',
     units: '',
-    prerequisites: [],
     term: '',         
-    year: selectedYear || '', // Set year by default         
   });
-  useEffect(() => {
-    setForm((prev) => ({
-      ...prev,
-      year: selectedYear,
-    }));
-  }, [selectedYear]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [tempPrereq, setTempPrereq] = useState(''); 
-
-  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Prevent year from being changed
-    if (name === 'year') return;
     setForm({ ...form, [name]: value });
   };
-  // Handle adding a prerequisite
-  const handleAddPrerequisite = () => {
-    if (tempPrereq.trim()) {
-      setForm({ ...form, prerequisites: [...form.prerequisites, tempPrereq.trim()] });
-      setTempPrereq('');
-    }
-  };
-  // Handle form submission
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add form data to the shared courses state (frontend only)
-    setCourses([...courses, { ...form, year: selectedYear, term: form.term }]); // Ensure year and term are set correctly
-    setForm({
-      course_code: '',
-      course_title: '',
-      description: '',
-      units: '',
-      prerequisites: [],
-      term: '',
-      year: selectedYear
-    });
+    setLoading(true);
+    setError(null);
+
+    try {
+      // First, insert the course
+      const { data: courseData, error: courseError } = await supabase
+        .from('courses')
+        .insert({
+          course_code: form.course_code,
+          course_title: form.course_title,
+          description: form.description,
+          units: form.units,
+          status: 'active'
+        })
+        .select('course_id')
+        .single();
+
+      if (courseError) throw courseError;
+
+      if (!courseData || !courseData.course_id) {
+        throw new Error('Failed to get course ID after insertion');
+      }
+
+      // Then, insert the course catalog entry
+      const { error: catalogError } = await supabase
+        .from('course_catalog')
+        .insert({
+          course_id: courseData.course_id,
+          year: selectedYear,
+          term: form.term,
+          status: 'active'
+        });
+
+      if (catalogError) throw catalogError;
+
+      // Reset form
+      setForm({
+        course_code: '',
+        course_title: '',
+        description: '',
+        units: '',
+        term: ''
+      });
+      
+      // Go back to the catalog management page
+      onBackClick();
+    } catch (err) {
+      setError(err.message);
+      console.error('Error adding course:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif', padding: '40px 20px' }}>
-    <h2>Catalog Year: {selectedYear}</h2>  
+      <h2>Catalog Year: {selectedYear}</h2>  
       <h3>Add New Course</h3>
+      {error && <div style={{ color: 'red', marginBottom: '20px' }}>{error}</div>}
       <form onSubmit={handleSubmit} style={{ textAlign: 'left' }}>
         <div>
           <label>Course Code:</label>
@@ -104,47 +128,35 @@ export default function AddCourse({ courses = [], setCourses, onBackClick, selec
           />
 
           <label>Term:</label>
-          <input
-            type="text"
+          <select
             name="term"
-            placeholder="Enter term (e.g., Spring, Summer, Fall)"
             value={form.term}
             onChange={handleChange}
             required
             style={{ width: '100%', padding: '8px', marginBottom: '10px', border: '1px solid #ccc', borderRadius: '4px' }}
-          />
+          >
+            <option value="">Select term</option>
+            <option value="spring">Spring</option>
+            <option value="summer">Summer</option>
+            <option value="fall">Fall</option>
+            <option value="winter">Winter</option>
+          </select>
 
-          <label>Prerequisites:</label>
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-            <input
-              type="text"
-              placeholder="Enter prerequisite course code"
-              value={tempPrereq}
-              onChange={(e) => setTempPrereq(e.target.value)}
-              style={{ flexGrow: 1, padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-            />
-            <button type="button" onClick={handleAddPrerequisite} style={{ padding: '8px 12px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-              Add
-            </button>
-          </div>
-
-          {form.prerequisites.length > 0 && (
-            <div style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <strong>Added Prerequisites:</strong>
-              <ul>
-                {form.prerequisites.map((code, index) => (
-                  <li key={index}>{code}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-            <button type="button" onClick={onBackClick} style={{ padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
+            <button 
+              type="button" 
+              onClick={onBackClick} 
+              style={{ padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              disabled={loading}
+            >
               Back
             </button>
-            <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-              Add Course
+            <button 
+              type="submit" 
+              style={{ padding: '10px 20px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+              disabled={loading}
+            >
+              {loading ? 'Adding Course...' : 'Add Course'}
             </button>
           </div>
         </div>
