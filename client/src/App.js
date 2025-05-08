@@ -14,6 +14,10 @@ import ProfessorPortal from './pages/Professor/ProfessorPortal';
 import StudentHistory from './pages/Professor/StudentHistory';
 import ViewPastGrades from './pages/Professor/components/ViewPastGrades';
 import GradeEntry from './pages/Professor/components/GradeEntry';
+import ClassRollManagement from './pages/Professor/components/ClassRollManagement';
+import AddStudentToClass from './pages/Professor/components/AddStudentToClass';
+import DropStudentFromClass from './pages/Professor/components/DropStudentFromClass';
+import ViewClassRoll from './pages/Professor/components/ViewClassRoll';
 
 // Import future UserManagement component when ready
 // import UserManagement from './pages/User/UserManagement';
@@ -142,6 +146,43 @@ function App() {
             element={
               isAuthenticated ? 
                 <GradeEntry /> : 
+                <Navigate to="/" />
+            }
+          />
+
+          {/* Class Roll Management routes */}
+          <Route
+            path="/professor/class-roll"
+            element={
+              isAuthenticated ? 
+                <ClassRollManagement /> : 
+                <Navigate to="/" />
+            }
+          />
+
+          <Route
+            path="/professor/class-roll/add-student"
+            element={
+              isAuthenticated ? 
+                <AddStudentToClass /> : 
+                <Navigate to="/" />
+            }
+          />
+
+          <Route
+            path="/professor/class-roll/drop-student"
+            element={
+              isAuthenticated ? 
+                <DropStudentFromClass /> : 
+                <Navigate to="/" />
+            }
+          />
+
+          <Route
+            path="/professor/class-roll/view"
+            element={
+              isAuthenticated ? 
+                <ViewClassRoll /> : 
                 <Navigate to="/" />
             }
           />

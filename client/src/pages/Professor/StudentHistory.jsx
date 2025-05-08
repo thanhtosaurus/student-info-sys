@@ -9,6 +9,12 @@ const StudentHistory = () => {
     <div className="student-history-container">
       <div className="student-history-box">
         <h1 className="student-history-title">Student History Management</h1>
+        <button 
+          className="back-button"
+          onClick={() => navigate('/professor')}
+        >
+          ← Back to Professor Portal
+        </button>
         <div className="button-container">
           <button 
             className="action-button view-grades-btn"

@@ -117,7 +117,7 @@ input:checked + .slider:before {
 .form-group label {
     font-size: 0.9rem;
     font-weight: 500;
-    color: #E6E6E6;
+    color: #E6E6E6 !important;
 }
 
 .form-group input {

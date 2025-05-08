@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 
 import AddUser from './AddUser';
-
+import ViewUserProfile from './ViewUserProfile';
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +10,7 @@ const ViewUsers = () => {
   const [error, setError] = useState(null);
 
   const [showAddUser, setShowAddUser] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
 
 
@@ -35,11 +36,23 @@ const ViewUsers = () => {
     }
   };
 
+  // Replace the current ViewUserProfile call with this
+  const handleViewProfile = (userId) => {
+    setSelectedUserId(userId);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   if (showAddUser) {
     return <AddUser onBackClick={() => setShowAddUser(false)} />;
+  }
+
+  if (selectedUserId) {
+    return <ViewUserProfile 
+      userId={selectedUserId} 
+      onBackClick={() => setSelectedUserId(null)} 
+    />;
   }
 
   return (
@@ -68,7 +81,7 @@ const ViewUsers = () => {
             <tr>
               {users.length > 0 && Object.keys(users[0]).map((header) => (
                 <th key={header} className="px-4 py-2 border-b">
-                  {header}
+                  {(header === 'id' || header === 'password') ? '' : header}
                 </th>
               ))}
             </tr>
@@ -76,9 +89,18 @@ const ViewUsers = () => {
           <tbody>
             {users.map((user, index) => (
               <tr key={index}>
-                {Object.values(user).map((value, i) => (
+                {Object.entries(user).map(([key, value], i) => (
                   <td key={i} className="px-4 py-2 border-b">
-                    {value?.toString() || ''}
+                     {key === 'id' ? (
+                         <button
+                         onClick={() => handleViewProfile(value)}
+                         className="text-blue-600 hover:underline cursor-pointer bg-transparent border-none p-0 m-0 text-left"
+                       >
+                         View User Profile
+                       </button>
+                      ):(
+                        value?.toString() || ''
+                      )}
                   </td>
                 ))}
               </tr>
