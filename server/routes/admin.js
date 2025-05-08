@@ -819,4 +819,73 @@ router.put('/deactivateUser/:id', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /activateUser/{id}:
+ *   put:
+ *     summary: Activate a user
+ *     description: Updates the user_status to 'active' for a specific user
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The user's unique identifier
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User activated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User activated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     user_status:
+ *                       type: string
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/activateUser/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Attempting to activate user with ID:', id);
+
+    const { data, error } = await supabase
+      .from('users')
+      .update({ user_status: 'active' })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Supabase error:', error);
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      throw error;
+    }
+
+    console.log('User activated successfully:', data);
+    res.json({
+      message: 'User activated successfully',
+      data
+    });
+  } catch (error) {
+    console.error('Error activating user:', error);
+    res.status(500).json({ error: 'Failed to activate user' });
+  }
+});
+
 module.exports = router;

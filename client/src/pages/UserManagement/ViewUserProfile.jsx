@@ -28,6 +28,33 @@ const ViewUserProfile = ({ userId, onBackClick }) => {
     }
   };
 
+  const handleActivate = async () => {
+    try {
+      console.log('Attempting to activate user:', userId);
+      const response = await fetch(`http://localhost:5001/api/admin/activateUser/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      console.log('Response status:', response.status);
+      const responseText = await response.text();
+      console.log('Response text:', responseText);
+
+      if (!response.ok) {
+        throw new Error(responseText || 'Failed to activate student');
+      }
+
+      const result = JSON.parse(responseText);
+      setUser(result.data);
+      alert('Student has been activated successfully');
+    } catch (error) {
+      console.error('Activation error:', error);
+      alert('Error activating student: ' + error.message);
+    }
+  };
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -64,6 +91,12 @@ const ViewUserProfile = ({ userId, onBackClick }) => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">User Profile</h1>
           <div className="space-x-4">
+            <button
+              onClick={handleActivate}
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Activate User
+            </button>
             <button
               onClick={handleDeactivate}
               className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
