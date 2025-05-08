@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
 
 export default function EditCourseInfo({ onBackClick, selectedYear }) {
@@ -15,11 +15,7 @@ export default function EditCourseInfo({ onBackClick, selectedYear }) {
     year: selectedYear
   });
 
-  useEffect(() => {
-    fetchCourses();
-  }, [selectedYear]);
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('courses')
@@ -43,7 +39,11 @@ export default function EditCourseInfo({ onBackClick, selectedYear }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedYear]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
 
   const handleEdit = (index) => {
     const course = courses[index];

@@ -3,6 +3,7 @@ const app = express();
 const cors = require("cors");
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
+const professorRouter = require('./routes/professor');
 const swaggerUi = require('swagger-ui-express');
 const specs = require('./swagger');
 
@@ -13,6 +14,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/professors', professorRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get("/", (req, res) => {
