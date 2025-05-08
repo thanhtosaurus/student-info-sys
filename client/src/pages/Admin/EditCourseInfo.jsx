@@ -17,7 +17,7 @@ export default function EditCourseInfo({ onBackClick, selectedYear }) {
 
   useEffect(() => {
     fetchCourses();
-  }, [selectedYear]);
+  }, [fetchCourses]);
 
   const fetchCourses = async () => {
     try {

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { supabase } from '../../supabaseClient';
 
 // Frontend only: form component to add a new course
