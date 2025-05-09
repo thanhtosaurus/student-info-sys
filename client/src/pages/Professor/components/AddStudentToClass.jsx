@@ -9,6 +9,9 @@ const AddStudentToClass = () => {
     section: '',
     studentId: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,8 +23,40 @@ const AddStudentToClass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement API call to add student to class
-    console.log('Adding student to class:', formData);
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await fetch('http://localhost:5001/api/professors/add-student-to-class', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          courseCode: formData.courseCode,
+          section: formData.section,
+          studentId: formData.studentId
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add student to class.');
+      }
+
+      setSuccess('Student successfully added to class!');
+      // Reset form after successful submission
+      setFormData({
+        courseCode: '',
+        section: '',
+        studentId: ''
+      });
+    } catch (err) {
+      setError(err.message || 'Failed to add student to class. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,11 +112,15 @@ const AddStudentToClass = () => {
             />
           </div>
 
-          <button type="submit" className="submit-button">
-            Add Student to Class
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? 'Adding...' : 'Add Student to Class'}
           </button>
         </form>
       </div>
+      
+      {loading && <div className="loading">Adding student to class...</div>}
+      {error && {error}}
+      {success && <div className="success">{success}</div>}
     </div>
   );
 };
