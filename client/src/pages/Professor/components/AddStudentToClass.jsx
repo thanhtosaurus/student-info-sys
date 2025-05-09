@@ -119,7 +119,7 @@ const AddStudentToClass = () => {
       </div>
       
       {loading && <div className="loading">Adding student to class...</div>}
-      {error && {error}}
+      {error && <div className="error">{error}</div>}
       {success && <div className="success">{success}</div>}
     </div>
   );
