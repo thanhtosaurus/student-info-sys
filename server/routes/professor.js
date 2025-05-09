@@ -57,4 +57,56 @@ router.get('/class-roll/:courseCode/:sectionId', async (req, res) => {
     }
 });
 
+// Drop student from class
+router.delete('/drop-student', async (req, res) => {
+    try {
+        const { courseCode, section, studentId } = req.body;
+
+        // Validate required fields
+        if (!courseCode || !section || !studentId) {
+            return res.status(400).json({ error: 'Course code, section, and student ID are required' });
+        }
+
+        // 1. Get the course_id from the course_code
+        const { data: courseData, error: courseError } = await supabase
+            .from('courses')
+            .select('course_id')
+            .eq('course_code', courseCode)
+            .single();
+
+        if (courseError || !courseData) {
+            return res.status(404).json({ error: 'Course not found' });
+        }
+
+        // 2. Get the section_id using course_id and section number
+        const { data: sectionData, error: sectionError } = await supabase
+            .from('sections')
+            .select('section_id')
+            .eq('course_id', courseData.course_id)
+            .eq('section_number', section)
+            .single();
+
+        if (sectionError || !sectionData) {
+            return res.status(404).json({ error: 'Section not found for the selected course' });
+        }
+
+        // 3. Delete the enrollment record
+        const { error: deleteError } = await supabase
+            .from('enrollments')
+            .delete()
+            .eq('student_uuid', studentId)
+            .eq('section_id', sectionData.section_id);
+
+        if (deleteError) {
+            console.error('Error dropping student:', deleteError);
+            return res.status(500).json({ error: 'Failed to drop student from class' });
+        }
+
+        res.json({ message: 'Student successfully dropped from class' });
+    } catch (err) {
+        console.error('Error in drop-student route:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 module.exports = router; 
