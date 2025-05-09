@@ -9,6 +9,9 @@ const DropStudentFromClass = () => {
     section: '',
     studentId: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,8 +23,37 @@ const DropStudentFromClass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement API call to drop student from class
-    console.log('Dropping student from class:', formData);
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const response = await fetch('http://localhost:5001/api/professors/drop-student', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to drop student from class');
+      }
+
+      const data = await response.json();
+      setSuccess(data.message || 'Student successfully dropped from class!');
+      setFormData({
+        courseCode: '',
+        section: '',
+        studentId: ''
+      });
+
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -77,8 +109,11 @@ const DropStudentFromClass = () => {
             />
           </div>
 
-          <button type="submit" className="submit-button danger">
-            Drop Student from Class
+          {error && <div className="error-message">{error}</div>}
+          {success && <div className="success-message">{success}</div>}
+
+          <button type="submit" className="submit-button danger" disabled={loading}>
+            {loading ? 'Processing...' : 'Drop Student from Class'}
           </button>
         </form>
       </div>
