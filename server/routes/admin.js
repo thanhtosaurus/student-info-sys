@@ -888,4 +888,80 @@ router.put('/activateUser/:id', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /updateUser/{id}:
+ *   put:
+ *     summary: Update user details
+ *     description: Updates the user's information including username, first name, last name, email and role
+ *     tags:
+ *       - Users
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The user's unique identifier
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/updateUser/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, first_name, last_name, email, role } = req.body;
+
+    const { data, error } = await supabase
+      .from('users')
+      .update({ 
+        username,
+        first_name,
+        last_name,
+        email,
+        role,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      throw error;
+    }
+
+    res.json({
+      message: 'User updated successfully',
+      data
+    });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
 module.exports = router;
